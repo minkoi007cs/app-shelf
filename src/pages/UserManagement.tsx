@@ -40,7 +40,7 @@ export default function UserManagement() {
   async function loadUsers() {
     setIsLoading(true);
     const { data } = await supabase
-      .from('aw_user_permissions')
+      .from('mk_user_permissions')
       .select('*')
       .order('created_at', { ascending: true });
     setUsers((data as ManagedUser[]) ?? []);
@@ -55,7 +55,7 @@ export default function UserManagement() {
     setSavingId(user.user_id);
     const updated = { ...user, [key]: value, updated_at: new Date().toISOString() };
     await supabase
-      .from('aw_user_permissions')
+      .from('mk_user_permissions')
       .update({ [key]: value, updated_at: new Date().toISOString() })
       .eq('user_id', user.user_id);
     setUsers(prev => prev.map(u => u.user_id === user.user_id ? updated : u));
@@ -66,7 +66,7 @@ export default function UserManagement() {
     const newRole = user.role === 'admin' ? 'user' : 'admin';
     setSavingId(user.user_id);
     await supabase
-      .from('aw_user_permissions')
+      .from('mk_user_permissions')
       .update({ role: newRole, updated_at: new Date().toISOString() })
       .eq('user_id', user.user_id);
     setUsers(prev => prev.map(u => u.user_id === user.user_id ? { ...u, role: newRole } : u));

@@ -149,7 +149,7 @@ export default function AppWallet() {
     Omit<AppProject, 'backlog'>,
     AppProjectRow
   >({
-    table: 'aw_app_projects',
+    table: 'mk_app_projects',
     rowToItem: rowToAppProject,
     itemToRow: appProjectToRow,
     seed: (loaded) =>
@@ -160,7 +160,7 @@ export default function AppWallet() {
     BacklogItem & { projectId: string },
     BacklogItemRow
   >({
-    table: 'aw_app_backlog_items',
+    table: 'mk_app_backlog_items',
     rowToItem: (row) => ({
       ...rowToBacklogItem(row),
       projectId: row.project_id,
@@ -294,7 +294,7 @@ export default function AppWallet() {
               healthCheckedAt: nowTimeStr,
             };
             const row = appProjectToRow(updatedApp);
-            await supabase.from('aw_app_projects').update(row).eq('id', app.id);
+            await supabase.from('mk_app_projects').update(row).eq('id', app.id);
             setProjectItems((prev) =>
               prev.map((p) =>
                 p.id === app.id ? { ...p, healthStatus: status, healthCheckedAt: nowTimeStr } : p
@@ -336,7 +336,7 @@ export default function AppWallet() {
         manualCheckedAt: nextCheckedAt,
       };
       const row = appProjectToRow(updatedApp);
-      const { error: upErr } = await supabase.from('aw_app_projects').update(row).eq('id', app.id);
+      const { error: upErr } = await supabase.from('mk_app_projects').update(row).eq('id', app.id);
       if (upErr) {
         console.error('Failed to save verification status:', upErr);
         alert('Failed to save verification status: ' + upErr.message);
@@ -350,14 +350,14 @@ export default function AppWallet() {
   // Save newly created app (from AddAppModal)
   const handleSaveNewApp = async (newProj: Omit<AppProject, 'backlog'>, backlog: BacklogItem[]) => {
     const row = appProjectToRow(newProj as AppProject);
-    const { error: saveErr } = await supabase.from('aw_app_projects').insert(row);
+    const { error: saveErr } = await supabase.from('mk_app_projects').insert(row);
     if (saveErr) {
       throw new Error('Failed to save to Supabase: ' + saveErr.message);
     }
 
     if (backlog.length > 0) {
       const backlogRows = backlog.map((b) => backlogItemToRow(b, newProj.id));
-      await supabase.from('aw_app_backlog_items').insert(backlogRows);
+      await supabase.from('mk_app_backlog_items').insert(backlogRows);
     }
 
     setProjectItems((prev) => [newProj, ...prev]);
@@ -369,7 +369,7 @@ export default function AppWallet() {
   // Update existing app (from AddAppModal or Portfolio Settings Tab)
   const handleUpdateExistingApp = async (updated: AppProject, backlog: BacklogItem[]) => {
     const row = appProjectToRow(updated);
-    const { error: saveErr } = await supabase.from('aw_app_projects').upsert(row);
+    const { error: saveErr } = await supabase.from('mk_app_projects').upsert(row);
     if (saveErr) {
       throw new Error('Failed to update in Supabase: ' + saveErr.message);
     }
@@ -380,12 +380,12 @@ export default function AppWallet() {
     const origBacklog = backlogItems.filter((b) => b.projectId === updated.id);
     const deletedIds = removedIds(origBacklog, backlog);
     if (deletedIds.length > 0) {
-      await supabase.from('aw_app_backlog_items').delete().in('id', deletedIds);
+      await supabase.from('mk_app_backlog_items').delete().in('id', deletedIds);
     }
 
     if (backlog.length > 0) {
       const backlogRows = backlog.map((b) => backlogItemToRow(b, updated.id));
-      await supabase.from('aw_app_backlog_items').upsert(backlogRows);
+      await supabase.from('mk_app_backlog_items').upsert(backlogRows);
     }
 
     setBacklogItems((prev) => [
@@ -824,8 +824,8 @@ export default function AppWallet() {
               }}
               onDeleteApp={async (deleteId) => {
                 try {
-                  await supabase.from('aw_app_backlog_items').delete().eq('project_id', deleteId);
-                  await supabase.from('aw_app_projects').delete().eq('id', deleteId);
+                  await supabase.from('mk_app_backlog_items').delete().eq('project_id', deleteId);
+                  await supabase.from('mk_app_projects').delete().eq('id', deleteId);
                   setProjectItems((prev) => prev.filter((p) => p.id !== deleteId));
                   setBacklogItems((prev) => prev.filter((b) => b.projectId !== deleteId));
                   navigate('/app-wallet');

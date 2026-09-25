@@ -41,7 +41,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 const ADMIN_EMAILS = [
   'johnny.khoihoang@gmail.com',
-  'hoang.hoa@gmail.com',
+  'minkoi007.cs@gmail.com',
 ];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Try to register user identity safely (INSERT only if not exists)
     try {
       await supabase
-        .from('aw_user_permissions')
+        .from('mk_user_permissions')
         .upsert(registerRow, { onConflict: 'user_id', ignoreDuplicates: true });
     } catch (err) {
       console.warn('permission row upsert failed', err);
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Read permissions row from DB
     const { data } = await supabase
-      .from('aw_user_permissions')
+      .from('mk_user_permissions')
       .select('*')
       .eq('user_id', userId)
       .single();
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (isOwnerAdmin && data?.role !== 'admin') {
         try {
           await supabase
-            .from('aw_user_permissions')
+            .from('mk_user_permissions')
             .update({
               role: 'admin',
               can_read_token_wallet: true,
