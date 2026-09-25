@@ -13,6 +13,7 @@ import { interpretHealth } from '../utils/health';
 import { supabase } from '../utils/supabaseClient';
 import { appProjectToRow, backlogItemToRow } from '../data/mappers';
 import { newId } from '../utils/ids';
+import { getAppTheme } from '../data/appThemes';
 
 interface AppPortfolioModalProps {
   app: AppProject;
@@ -274,11 +275,12 @@ export function AppPortfolioModal({
     setFormData({ ...app });
   }, [app]);
 
-  // Favicon handling
+  // Favicon & Brand Theme handling
+  const theme = getAppTheme(app.id);
   const candidates = useMemo(() => getFaviconCandidates(app.frontendUrl, app.id), [app.frontendUrl, app.id]);
   const [candidateIndex, setCandidateIndex] = useState(0);
   const initials = getAppInitials(app.title);
-  const bgGradient = getAppGradient(app.title + app.id);
+  const bgGradient = theme.iconBg || getAppGradient(app.title + app.id);
   const currentSrc = candidateIndex < candidates.length ? candidates[candidateIndex] : null;
 
   // Backlog counts
@@ -490,6 +492,23 @@ export function AppPortfolioModal({
               <div className="portfolio-title-row">
                 <h1 className="portfolio-app-title">{app.title}</h1>
                 <span className="portfolio-status-pill">{app.status}</span>
+                {theme.featureBadge && (
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: theme.primary,
+                      background: theme.bgLight,
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      border: `1px solid ${theme.borderColor}`,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {theme.featureBadge}
+                  </span>
+                )}
                 {app.manualChecked && (
                   <span className="portfolio-verified-badge" title={`Verified at: ${app.manualCheckedAt || 'N/A'}`}>
                     ✓ Verified

@@ -19,6 +19,7 @@ import { AddAppModal } from '../components/AddAppModal';
 import { ShareAppsModal } from '../components/ShareAppsModal';
 import { removedIds } from '../data/syncPolicy';
 import { MINKOI_DEFAULT_APPS } from '../data/minKoiApps';
+import { getAppTheme } from '../data/appThemes';
 import { useAuth } from '../contexts/AuthContext';
 import {
   SearchIcon,
@@ -81,11 +82,21 @@ function getFaviconCandidates(url?: string, id?: string): string[] {
   return candidates;
 }
 
-function AppIcon({ title, frontendUrl, id }: { title: string; frontendUrl?: string; id: string }) {
+function AppIcon({
+  title,
+  frontendUrl,
+  id,
+  iconBg,
+}: {
+  title: string;
+  frontendUrl?: string;
+  id: string;
+  iconBg?: string;
+}) {
   const candidates = useMemo(() => getFaviconCandidates(frontendUrl, id), [frontendUrl, id]);
   const [candidateIndex, setCandidateIndex] = useState(0);
   const initials = getAppInitials(title);
-  const bgGradient = getAppGradient(title + id);
+  const bgGradient = iconBg || getAppGradient(title + id);
 
   useEffect(() => {
     setCandidateIndex(0);
@@ -105,7 +116,7 @@ function AppIcon({ title, frontendUrl, id }: { title: string; frontendUrl?: stri
             width: '100%',
             height: '100%',
             objectFit: 'contain',
-            padding: '7px',
+            padding: '6px',
             background: 'rgba(15, 23, 42, 0.75)',
             backdropFilter: 'blur(4px)',
             borderRadius: '14px',
@@ -576,6 +587,7 @@ export default function AppWallet() {
             {filteredApps.map((app, index) => {
               const backlogCount = app.backlog?.length || 0;
               const isSelected = selectedAppIds.has(app.id);
+              const theme = getAppTheme(app.id);
 
               return (
                 <div
@@ -583,7 +595,21 @@ export default function AppWallet() {
                   className={`store-card ${app.isDisabled ? 'disabled' : ''} ${
                     isSelectMode && isSelected ? 'selected-card' : ''
                   }`}
-                  style={{ animationDelay: `${index * 0.04}s`, cursor: 'pointer' }}
+                  style={{
+                    animationDelay: `${index * 0.04}s`,
+                    cursor: 'pointer',
+                    background: theme.cardBg,
+                    borderColor: theme.borderColor,
+                    boxShadow: `0 4px 20px -2px ${theme.glowColor}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = theme.hoverBorder;
+                    e.currentTarget.style.boxShadow = `0 12px 30px 2px ${theme.glowColor}`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = theme.borderColor;
+                    e.currentTarget.style.boxShadow = `0 4px 20px -2px ${theme.glowColor}`;
+                  }}
                   onClick={() => {
                     if (isSelectMode) {
                       handleToggleSelectApp(app.id);
@@ -608,12 +634,35 @@ export default function AppWallet() {
                           {isSelected && <CheckIcon size={12} />}
                         </div>
                       )}
-                      <AppIcon title={app.title} frontendUrl={app.frontendUrl} id={app.id} />
+                      <AppIcon
+                        title={app.title}
+                        frontendUrl={app.frontendUrl}
+                        id={app.id}
+                        iconBg={theme.iconBg}
+                      />
                       <div className="store-app-meta">
                         <div className="store-app-title" title={app.title}>
                           {app.title}
                         </div>
-                        <div className="store-app-category">{app.category || 'Web App'}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '3px' }}>
+                          <span className="store-app-category">{app.category || 'Web App'}</span>
+                          {theme.featureBadge && (
+                            <span
+                              style={{
+                                fontSize: '0.67rem',
+                                fontWeight: 600,
+                                color: theme.primary,
+                                background: theme.bgLight,
+                                padding: '1px 6px',
+                                borderRadius: '4px',
+                                border: `1px solid ${theme.borderColor}`,
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {theme.featureBadge}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
 

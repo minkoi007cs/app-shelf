@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="awBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b132b"/>
+      <stop offset="100%" stop-color="#1c2541"/>
+    </linearGradient>
+    <linearGradient id="awCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#awBg)" stroke="url(#awCard)" stroke-width="2"/>
+  <rect x="14" y="22" width="36" height="24" rx="4" fill="none" stroke="url(#awCard)" stroke-width="2.5"/>
+  <path d="M14 28 L50 28" stroke="url(#awCard)" stroke-width="2"/>
+  <rect x="19" y="34" width="7" height="6" rx="1.5" fill="#facc15"/>
+  <path d="M40 33 C42 35 42 38 40 40" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M43 31 C46 34 46 40 43 43" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+</svg>
