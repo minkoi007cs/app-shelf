@@ -637,14 +637,33 @@ export default function AppWallet() {
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <span className="store-status-badge">{app.status}</span>
-                        {app.manualChecked && (
+                        {app.manualChecked ? (
                           <span
                             className="store-verified-pill"
-                            title={`Verified at ${app.manualCheckedAt || 'Recent'}`}
+                            title={`Verified: ${app.manualCheckedAt || 'Yes'}${canEdit ? ' (click to toggle)' : ''}`}
+                            onClick={(e) => {
+                              if (canEdit) {
+                                e.stopPropagation();
+                                handleToggleManualCheck(app);
+                              }
+                            }}
+                            style={{ cursor: canEdit ? 'pointer' : 'default' }}
                           >
                             ✓
                           </span>
-                        )}
+                        ) : canEdit ? (
+                          <span
+                            className="store-verified-pill"
+                            title="Click to mark verified"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleManualCheck(app);
+                            }}
+                            style={{ cursor: 'pointer', opacity: 0.5, borderColor: 'rgba(255,255,255,0.15)', color: '#94a3b8' }}
+                          >
+                            ○
+                          </span>
+                        ) : null}
                       </div>
                     </div>
 
