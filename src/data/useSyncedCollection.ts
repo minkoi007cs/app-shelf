@@ -15,11 +15,15 @@ export function useSyncedCollection<T extends { id: string }, R extends Record<s
   itemToRow,
   seed = [],
 }: UseSyncedCollectionOptions<T, R>) {
-  const [items, setItems] = useState<T[]>([]);
+  const getSeedItems = (): T[] => {
+    return typeof seed === 'function' ? seed([]) : seed;
+  };
+
+  const [items, setItems] = useState<T[]>(getSeedItems);
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'failed'>('loading');
   const [error, setError] = useState<string | null>(null);
 
-  const snapshotRef = useRef<T[]>([]);
+  const snapshotRef = useRef<T[]>(getSeedItems());
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isSyncingRef = useRef<boolean>(false);
 
@@ -34,21 +38,27 @@ export function useSyncedCollection<T extends { id: string }, R extends Record<s
         if (!isMounted) return;
 
         if (fetchErr) {
-          setError(fetchErr.message);
-          setLoadState('failed');
+          console.warn(`[useSyncedCollection] Error loading table ${table}, falling back to default seed:`, fetchErr);
+          const fallback = getSeedItems();
+          snapshotRef.current = fallback;
+          setItems(fallback);
+          setLoadState('ready');
           return;
         }
 
         const loadedItems = ((data || []) as R[]).map((r) => rowToItem(r));
-        const finalItems = typeof seed === 'function' ? seed(loadedItems) : (loadedItems.length > 0 ? loadedItems : seed);
+        const finalItems = typeof seed === 'function' ? seed(loadedItems) : (loadedItems.length > 0 ? loadedItems : getSeedItems());
 
         snapshotRef.current = finalItems;
         setItems(finalItems);
         setLoadState('ready');
       } catch (err: any) {
         if (!isMounted) return;
-        setError(err?.message || 'Failed to load');
-        setLoadState('failed');
+        console.warn(`[useSyncedCollection] Exception loading table ${table}:`, err);
+        const fallback = getSeedItems();
+        snapshotRef.current = fallback;
+        setItems(fallback);
+        setLoadState('ready');
       }
     }
 
