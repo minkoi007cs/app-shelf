@@ -52,7 +52,7 @@ export const APP_BRAND_THEMES: Record<string, AppBrandTheme> = {
     hoverBorder: 'rgba(245, 158, 11, 0.65)',
     glowColor: 'rgba(245, 158, 11, 0.28)',
     tagline: 'Automated Rental Billing',
-    featureBadge: '🏠 VietQR & Tariff Engine',
+    featureBadge: '🏠 QR Payment & Tariff Engine',
     iconBg: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
   },
   'embeded-system': {

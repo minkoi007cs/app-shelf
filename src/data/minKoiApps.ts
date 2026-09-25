@@ -187,7 +187,7 @@ export const MINKOI_DEFAULT_APPS: (AppProject & { backlog?: BacklogItem[] })[] =
     ),
     backlog: [
       { id: 'bl-hr-1', title: 'Build automated electricity progressive tariff calculator', isCompleted: true },
-      { id: 'bl-hr-2', title: 'Implement VietQR payment code generation on invoices', isCompleted: true },
+      { id: 'bl-hr-2', title: 'Implement dynamic QR payment code generation on invoices', isCompleted: true },
       { id: 'bl-hr-3', title: 'Add monthly PDF invoice export feature', isCompleted: false },
     ],
   },

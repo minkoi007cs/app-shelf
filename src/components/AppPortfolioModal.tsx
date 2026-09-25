@@ -143,14 +143,12 @@ function SpecDocRenderer({ content }: { content: string }) {
         <h1
           key={index}
           style={{
-            fontSize: '1.4rem',
+            fontSize: '1.45rem',
             fontWeight: 700,
-            color: '#60a5fa',
-            borderBottom: '2px solid rgba(99, 102, 241, 0.3)',
-            paddingBottom: '0.4rem',
-            marginTop: index === 0 ? '0' : '1.5rem',
+            color: '#f8fafc',
+            marginTop: index === 0 ? '0' : '2rem',
             marginBottom: '0.85rem',
-            letterSpacing: '-0.01em',
+            letterSpacing: '-0.02em',
           }}
         >
           {formatInline(trimmed.substring(2))}
@@ -165,15 +163,11 @@ function SpecDocRenderer({ content }: { content: string }) {
         <h2
           key={index}
           style={{
-            fontSize: '1.15rem',
-            fontWeight: 700,
+            fontSize: '1.18rem',
+            fontWeight: 600,
             color: '#38bdf8',
-            background: 'rgba(56, 189, 248, 0.08)',
-            padding: '0.4rem 0.75rem',
-            borderRadius: '6px',
-            borderLeft: '4px solid #38bdf8',
-            marginTop: '1.25rem',
-            marginBottom: '0.75rem',
+            marginTop: '1.65rem',
+            marginBottom: '0.65rem',
           }}
         >
           {formatInline(trimmed.substring(3))}
@@ -191,7 +185,7 @@ function SpecDocRenderer({ content }: { content: string }) {
             fontSize: '1rem',
             fontWeight: 600,
             color: '#a7f3d0',
-            marginTop: '1rem',
+            marginTop: '1.25rem',
             marginBottom: '0.4rem',
           }}
         >
@@ -204,7 +198,7 @@ function SpecDocRenderer({ content }: { content: string }) {
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       inList = true;
       listItems.push(
-        <li key={index} style={{ marginBottom: '0.35rem', color: '#cbd5e1' }}>
+        <li key={index} style={{ marginBottom: '0.4rem', color: '#cbd5e1', lineHeight: '1.7' }}>
           {formatInline(trimmed.substring(2))}
         </li>
       );
@@ -221,17 +215,15 @@ function SpecDocRenderer({ content }: { content: string }) {
           style={{
             display: 'flex',
             gap: '0.6rem',
-            marginBottom: '0.5rem',
-            background: 'rgba(255, 255, 255, 0.03)',
-            padding: '0.45rem 0.75rem',
-            borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
+            marginBottom: '0.55rem',
+            lineHeight: '1.7',
+            color: '#cbd5e1',
           }}
         >
-          <span style={{ fontWeight: 700, color: '#818cf8', minWidth: '1.2rem' }}>
+          <span style={{ fontWeight: 600, color: '#818cf8', minWidth: '1.2rem' }}>
             {numMatch ? numMatch[0] : ''}
           </span>
-          <span style={{ color: '#e2e8f0' }}>{formatInline(text)}</span>
+          <span>{formatInline(text)}</span>
         </div>
       );
       return;
@@ -239,7 +231,7 @@ function SpecDocRenderer({ content }: { content: string }) {
 
     flushList(`${index}`);
     elements.push(
-      <p key={index} style={{ marginBottom: '0.75rem', color: '#cbd5e1', lineHeight: '1.65' }}>
+      <p key={index} style={{ marginBottom: '0.85rem', color: '#cbd5e1', lineHeight: '1.7' }}>
         {formatInline(trimmed)}
       </p>
     );
@@ -260,7 +252,6 @@ export function AppPortfolioModal({
   onBacklogChange,
 }: AppPortfolioModalProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'specs' | 'backlog' | 'settings'>(initialTab);
-  const [specLang, setSpecLang] = useState<'vi' | 'en'>('en');
   const [isCheckingHealth, setIsCheckingHealth] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [newBacklogTitle, setNewBacklogTitle] = useState('');
@@ -813,21 +804,10 @@ export function AppPortfolioModal({
           {activeTab === 'specs' && (
             <div className="portfolio-tab-content">
               <div className="portfolio-spec-header">
-                <div className="portfolio-spec-lang-btns">
-                  <button
-                    type="button"
-                    className={`btn ${specLang === 'en' ? 'btn-primary' : 'btn-secondary'}`}
-                    onClick={() => setSpecLang('en')}
-                  >
-                    🇬🇧 English Specification
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn ${specLang === 'vi' ? 'btn-primary' : 'btn-secondary'}`}
-                    onClick={() => setSpecLang('vi')}
-                  >
-                    🇻🇳 Vietnamese SRS
-                  </button>
+                <div className="portfolio-spec-title-info">
+                  <span style={{ fontSize: '0.92rem', fontWeight: 600, color: '#f1f5f9', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span>📋</span> System Requirements &amp; Architecture Specification
+                  </span>
                 </div>
 
                 <div className="portfolio-spec-meta">
@@ -849,11 +829,7 @@ export function AppPortfolioModal({
 
               <div className="portfolio-spec-doc-container">
                 <SpecDocRenderer
-                  content={
-                    specLang === 'en'
-                      ? (app.specEn || 'No English specification available for this project.')
-                      : (app.specVi || 'No Vietnamese specification available for this project.')
-                  }
+                  content={app.specEn || app.description || 'No system specification available for this project.'}
                 />
               </div>
             </div>
@@ -1127,30 +1103,17 @@ export function AppPortfolioModal({
 
                   {/* Section 5: SRS Markdown */}
                   <div className="form-section-title">
-                    <span>📝</span> 5. SRS Technical Specifications (Markdown)
+                    <span>📝</span> 5. System Specification (SRS Markdown)
                   </div>
-                  <div className="form-grid-2">
-                    <div className="form-group">
-                      <label>English Specification (Markdown):</label>
-                      <textarea
-                        className="input-text"
-                        rows={8}
-                        value={formData.specEn || ''}
-                        onChange={(e) => setFormData({ ...formData, specEn: e.target.value })}
-                        placeholder="# 1. Overview and Architecture..."
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Vietnamese Specification (Markdown - Optional):</label>
-                      <textarea
-                        className="input-text"
-                        rows={8}
-                        value={formData.specVi || ''}
-                        onChange={(e) => setFormData({ ...formData, specVi: e.target.value })}
-                        placeholder="# 1. Overview & Architecture..."
-                      />
-                    </div>
+                  <div className="form-group">
+                    <label>Specification Content (Markdown):</label>
+                    <textarea
+                      className="input-text"
+                      rows={10}
+                      value={formData.specEn || ''}
+                      onChange={(e) => setFormData({ ...formData, specEn: e.target.value })}
+                      placeholder="# 1. Executive Summary & Objective..."
+                    />
                   </div>
 
                   {/* Form Actions footer */}

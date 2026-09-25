@@ -3769,7 +3769,7 @@ header h1 svg {
 .portfolio-backlog-preview-list {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;
   margin-top: 0.85rem;
 }
 
@@ -3777,17 +3777,18 @@ header h1 svg {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  padding: 0.55rem 0.85rem;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  padding: 0.45rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0;
   font-size: 0.85rem;
   color: #e2e8f0;
   transition: all 0.15s ease;
 }
 
 .portfolio-backlog-preview-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .portfolio-backlog-preview-item.completed {
@@ -3802,10 +3803,11 @@ header h1 svg {
 }
 
 .portfolio-sidebar-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 14px;
-  padding: 1.25rem;
+  background: transparent;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  padding: 0 0 0 1.5rem;
 }
 
 .portfolio-sidebar-title {
@@ -4102,13 +4104,22 @@ header h1 svg {
 }
 
 .portfolio-spec-doc-container {
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 1.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.5rem 0 2rem 0;
   color: #cbd5e1;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   line-height: 1.75;
+}
+
+/* Ensure no nested card frames inside tabs */
+.portfolio-tab-content .portfolio-card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 /* Backlog Tab */
@@ -4121,29 +4132,29 @@ header h1 svg {
 .portfolio-backlog-full-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .portfolio-backlog-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
+  padding: 0.75rem 0.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
   transition: all 0.2s ease;
 }
 
 .portfolio-backlog-row:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
   border-color: rgba(99, 102, 241, 0.3);
 }
 
 .portfolio-backlog-row.done {
   opacity: 0.65;
-  background: rgba(16, 185, 129, 0.04);
-  border-color: rgba(16, 185, 129, 0.15);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .portfolio-backlog-row.done .backlog-row-title {
