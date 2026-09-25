@@ -67,7 +67,7 @@ export function AddAppModal({
     title: '',
     frontendUrl: '',
     category: 'Web App',
-    database: 'JH Supabase Data 1',
+    database: 'Neon PostgreSQL',
     status: 'Development',
     priority: 'Medium',
     description: '',
@@ -105,12 +105,12 @@ export function AddAppModal({
 
     setIsProcessing(true);
     setErrorMessage('');
-    setProgressStep('Đang kết nối GitHub và kiểm tra kho mã nguồn...');
+    setProgressStep('Connecting to GitHub and analyzing repository...');
 
     try {
       const repoPayload = await fetchGitHubRepoData(targetInput, effectiveGhToken);
 
-      setProgressStep('AI đang đọc README, dependencies & cấu trúc để trích xuất đặc tả...');
+      setProgressStep('AI is inspecting README, dependencies & code structure to extract specifications...');
       const aiResult = await extractAppWithAI('github', repoPayload);
 
       setExtractedData(aiResult);
@@ -129,7 +129,7 @@ export function AddAppModal({
         setViewMode('review');
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Lỗi khi trích xuất dữ liệu từ GitHub');
+      setErrorMessage(err?.message || 'Failed to extract data from GitHub');
     } finally {
       setIsProcessing(false);
       setProgressStep('');
@@ -147,12 +147,12 @@ export function AddAppModal({
 
     setIsProcessing(true);
     setErrorMessage('');
-    setProgressStep('Đang kết nối dự án Vercel & kiểm tra website...');
+    setProgressStep('Connecting to Vercel project and probing live website...');
 
     try {
       const vercelPayload = await fetchVercelProjectData(vercelInput, vercelToken);
 
-      setProgressStep('AI đang phân tích kiến trúc, giao diện & tạo tài liệu đặc tả...');
+      setProgressStep('AI is analyzing architecture, UI & generating specifications...');
       const aiResult = await extractAppWithAI('vercel', vercelPayload);
 
       setExtractedData(aiResult);
@@ -171,7 +171,7 @@ export function AddAppModal({
         setViewMode('review');
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Lỗi khi trích xuất dữ liệu từ Vercel');
+      setErrorMessage(err?.message || 'Failed to extract data from Vercel');
     } finally {
       setIsProcessing(false);
       setProgressStep('');
@@ -191,12 +191,10 @@ export function AddAppModal({
       techNotes: result.techNotes,
       specVi: result.specVi,
       specEn: result.specEn,
-      specUpdatedAt: new Date().toLocaleDateString('vi-VN', {
+      specUpdatedAt: new Date().toLocaleDateString('en-US', {
         day: '2-digit',
-        month: '2-digit',
+        month: 'short',
         year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
       }),
     });
 
@@ -225,12 +223,10 @@ export function AddAppModal({
         techNotes: formData.techNotes || duplicateApp.techNotes,
         specVi: formData.specVi || duplicateApp.specVi,
         specEn: formData.specEn || duplicateApp.specEn,
-        specUpdatedAt: new Date().toLocaleDateString('vi-VN', {
+        specUpdatedAt: new Date().toLocaleDateString('en-US', {
           day: '2-digit',
-          month: '2-digit',
+          month: 'short',
           year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
         }),
       };
 
@@ -238,7 +234,7 @@ export function AddAppModal({
       await onUpdateExistingApp(updated, finalBacklog);
       onClose();
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Lỗi khi cập nhật ứng dụng');
+      setErrorMessage(err?.message || 'Failed to update application');
     } finally {
       setIsSaving(false);
     }
@@ -257,19 +253,17 @@ export function AddAppModal({
           title: formData.title.trim(),
           frontendUrl: formData.frontendUrl?.trim() || '',
           category: formData.category || 'Web App',
-          database: formData.database || 'JH Supabase Data 1',
+          database: formData.database || 'Neon PostgreSQL',
           status: formData.status || 'Development',
           priority: formData.priority || 'Medium',
           description: formData.description || '',
           techNotes: formData.techNotes || '',
           specVi: formData.specVi || '',
           specEn: formData.specEn || '',
-          specUpdatedAt: new Date().toLocaleDateString('vi-VN', {
+          specUpdatedAt: new Date().toLocaleDateString('en-US', {
             day: '2-digit',
-            month: '2-digit',
+            month: 'short',
             year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
           }),
         };
         await onUpdateExistingApp(updated, backlogList);
@@ -279,19 +273,17 @@ export function AddAppModal({
           title: formData.title.trim(),
           frontendUrl: formData.frontendUrl?.trim() || '',
           category: formData.category || 'Web App',
-          database: formData.database || 'JH Supabase Data 1',
+          database: formData.database || 'Neon PostgreSQL',
           status: formData.status || 'Development',
           priority: formData.priority || 'Medium',
           description: formData.description || '',
           techNotes: formData.techNotes || '',
           specVi: formData.specVi || '',
           specEn: formData.specEn || '',
-          specUpdatedAt: new Date().toLocaleDateString('vi-VN', {
+          specUpdatedAt: new Date().toLocaleDateString('en-US', {
             day: '2-digit',
-            month: '2-digit',
+            month: 'short',
             year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
           }),
           healthStatus: 'unknown',
         };
@@ -299,7 +291,7 @@ export function AddAppModal({
       }
       onClose();
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Lỗi khi lưu ứng dụng');
+      setErrorMessage(err?.message || 'Failed to save application');
     } finally {
       setIsSaving(false);
     }
@@ -324,10 +316,10 @@ export function AddAppModal({
     <Modal
       title={
         viewMode === 'duplicate_prompt'
-          ? 'Kiểm Tra Trùng Lặp Ứng Dụng'
+          ? 'Duplicate Application Detected'
           : viewMode === 'review'
-          ? 'Kiểm Tra & Lưu Ứng Dụng Mới'
-          : 'Thêm Ứng Dụng Mới (AI App Builder)'
+          ? 'Review & Save Application'
+          : 'Add Application (AI App Builder)'
       }
       onClose={onClose}
       maxWidth={viewMode === 'review' ? '720px' : '620px'}
@@ -372,7 +364,7 @@ export function AddAppModal({
               style={{ justifyContent: 'center', padding: '0.6rem 0.5rem' }}
             >
               <EditIcon size={16} />
-              <span>Thủ Công</span>
+              <span>Manual Entry</span>
             </button>
           </div>
 
@@ -409,10 +401,10 @@ export function AddAppModal({
             >
               <RefreshIcon size={32} className="spin-icon" />
               <div style={{ fontWeight: 600, fontSize: '1.05rem', color: '#818cf8' }}>
-                {progressStep || 'Đang xử lý...'}
+                {progressStep || 'Processing...'}
               </div>
               <p style={{ fontSize: '0.85rem', color: '#94a3b8', maxWidth: '420px' }}>
-                Hệ thống đang tự động trích xuất các thông tin kiến trúc, cấu hình cổng chạy, cơ sở dữ liệu và bản đặc tả kỹ thuật (SRS).
+                Extracting architecture details, database models, live URLs, and technical specifications (SRS).
               </p>
             </div>
           ) : (
@@ -438,10 +430,10 @@ export function AddAppModal({
                         <span style={{ fontSize: '1.2rem' }}>🐙</span>
                         <div>
                           <div style={{ fontWeight: 600, fontSize: '0.88rem', color: '#34d399' }}>
-                            ✓ Đã kết nối tài khoản GitHub (Quyền Private Repos)
+                            ✓ Connected to GitHub (Private & Public Repositories)
                           </div>
                           <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                            Có thể truy cập trực tiếp tất cả kho lưu trữ riêng tư & công khai.
+                            Direct access enabled for all private and public repositories.
                           </div>
                         </div>
                       </div>
@@ -451,9 +443,9 @@ export function AddAppModal({
                         className="btn btn-secondary btn-sm"
                         onClick={disconnectGitHub}
                         style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
-                        title="Ngắt kết nối hoặc đổi tài khoản"
+                        title="Disconnect or switch account"
                       >
-                        Đổi tài khoản
+                        Switch Account
                       </button>
                     </div>
                   ) : (
@@ -469,10 +461,10 @@ export function AddAppModal({
                     >
                       <div style={{ fontSize: '2rem', marginBottom: '0.35rem' }}>🐙</div>
                       <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.3rem', color: '#f8fafc' }}>
-                        Kết Nối Nhanh Với GitHub OAuth
+                        Connect Fast with GitHub OAuth
                       </h4>
                       <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                        Đăng nhập 1-click để hệ thống tự động nhận diện tất cả kho lưu trữ (Public & Private) mà không cần nhập Token thủ công.
+                        1-click sign in to automatically discover your repositories without manual tokens.
                       </p>
                       <button
                         type="button"
@@ -489,7 +481,7 @@ export function AddAppModal({
                         }}
                       >
                         <GithubIcon size={20} />
-                        <span>Đăng Nhập & Kết Nối Với GitHub</span>
+                        <span>Sign in & Connect GitHub</span>
                       </button>
                     </div>
                   )}
@@ -499,9 +491,9 @@ export function AddAppModal({
                     <div style={{ marginBottom: '1.25rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                         <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#e2e8f0', marginBottom: 0 }}>
-                          Chọn nhanh từ kho lưu trữ của bạn ({userRepos.length}):
+                          Quick select from your repositories ({userRepos.length}):
                         </label>
-                        <span style={{ fontSize: '0.75rem', color: '#818cf8' }}>Bấm để phân tích ngay</span>
+                        <span style={{ fontSize: '0.75rem', color: '#818cf8' }}>Click to analyze</span>
                       </div>
 
                       <div className="store-search-box" style={{ marginBottom: '0.5rem' }}>
@@ -511,7 +503,7 @@ export function AddAppModal({
                         <input
                           type="text"
                           className="store-search-input"
-                          placeholder="Tìm kiếm repository..."
+                          placeholder="Search repositories..."
                           value={repoSearchFilter}
                           onChange={(e) => setRepoSearchFilter(e.target.value)}
                           style={{ padding: '0.4rem 0.5rem 0.4rem 2rem', fontSize: '0.82rem' }}
@@ -560,7 +552,7 @@ export function AddAppModal({
                                 </div>
                               )}
                             </div>
-                            <span style={{ fontSize: '0.75rem', color: '#818cf8', fontWeight: 600 }}>Chọn ➔</span>
+                            <span style={{ fontSize: '0.75rem', color: '#818cf8', fontWeight: 600 }}>Select ➔</span>
                           </div>
                         ))}
                       </div>
@@ -570,11 +562,11 @@ export function AddAppModal({
                   {/* Manual input form */}
                   <form onSubmit={(e) => handleConnectGitHub(e)}>
                     <div className="form-group">
-                      <label>Hoặc nhập trực tiếp URL / Tên Repository:</label>
+                      <label>Or enter repository URL / Full name:</label>
                       <input
                         type="text"
                         className="input-text"
-                        placeholder="VD: minkoi007cs/app_system hoặc https://github.com/minkoi007cs/app_system"
+                        placeholder="e.g. minkoi007cs/app_system or https://github.com/minkoi007cs/app_system"
                         value={githubInput}
                         onChange={(e) => setGithubInput(e.target.value)}
                         required
@@ -596,7 +588,7 @@ export function AddAppModal({
                             textDecoration: 'underline',
                           }}
                         >
-                          {showManualGhToken ? 'Ẩn ô nhập Personal Access Token' : '+ Nhập Personal Access Token (PAT) thủ công'}
+                          {showManualGhToken ? 'Hide manual Personal Access Token input' : '+ Enter manual Personal Access Token (PAT)'}
                         </button>
 
                         {showManualGhToken && (
@@ -609,7 +601,7 @@ export function AddAppModal({
                               onChange={(e) => setManualGhToken(e.target.value)}
                             />
                             <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px', display: 'block' }}>
-                              Token tạo tại GitHub Settings → Developer settings → Tokens (classic) với quyền `repo`.
+                              Generated from GitHub Settings → Developer settings → Tokens (classic) with `repo` scope.
                             </span>
                           </div>
                         )}
@@ -618,11 +610,11 @@ export function AddAppModal({
 
                     <div className="modal-actions" style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
                       <button type="button" className="btn btn-secondary" onClick={onClose}>
-                        Hủy
+                        Cancel
                       </button>
                       <button type="submit" className="btn btn-primary" disabled={!githubInput.trim()}>
                         <SparklesIcon size={16} />
-                        <span>Phân Tích & Tạo Ứng Dụng Với AI</span>
+                        <span>Analyze & Build App with AI</span>
                       </button>
                     </div>
                   </form>
@@ -633,27 +625,27 @@ export function AddAppModal({
               {activeTab === 'vercel' && (
                 <form onSubmit={handleConnectVercel}>
                   <div className="form-group">
-                    <label>Tên Vercel Project hoặc URL Deployment:</label>
+                    <label>Vercel Project Name or Deployment URL:</label>
                     <input
                       type="text"
                       className="input-text"
-                      placeholder="VD: https://token-wallet-chi.vercel.app hoặc token-wallet-chi"
+                      placeholder="e.g. https://app-shelf.vercel.app or app-shelf"
                       value={vercelInput}
                       onChange={(e) => setVercelInput(e.target.value)}
                       required
                       autoFocus
                     />
                     <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
-                      💡 Có thể nhập URL domain trực tiếp hoặc tên project Vercel.
+                      💡 You can enter a custom domain, vercel.app URL, or project slug.
                     </span>
                   </div>
 
                   <div className="form-group" style={{ marginTop: '1rem' }}>
-                    <label>Vercel API Token (Tùy chọn):</label>
+                    <label>Vercel API Token (Optional):</label>
                     <input
                       type="password"
                       className="input-text"
-                      placeholder="Nhập Vercel Token nếu có..."
+                      placeholder="Enter Vercel Token if available..."
                       value={vercelToken}
                       onChange={(e) => setVercelToken(e.target.value)}
                     />
@@ -675,17 +667,17 @@ export function AddAppModal({
                       style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                     />
                     <label htmlFor="save-vc-token" style={{ fontSize: '0.8rem', color: '#cbd5e1', cursor: 'pointer', marginBottom: 0 }}>
-                      Lưu Token này vào trình duyệt để sử dụng lần sau
+                      Save token in browser storage for future imports
                     </label>
                   </div>
 
                   <div className="modal-actions" style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
                     <button type="button" className="btn btn-secondary" onClick={onClose}>
-                      Hủy
+                      Cancel
                     </button>
                     <button type="submit" className="btn btn-primary" disabled={!vercelInput.trim()}>
                       <SparklesIcon size={16} />
-                      <span>Kết Nối & Phân Tích Với AI</span>
+                      <span>Connect & Analyze with AI</span>
                     </button>
                   </div>
                 </form>
@@ -709,14 +701,14 @@ export function AddAppModal({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#fbbf24', fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.5rem' }}>
               <AlertTriangleIcon size={20} />
-              <span>Phát Hiện Ứng Dụng Đã Tồn Tại Trong Hệ Thống!</span>
+              <span>Duplicate Application Detected!</span>
             </div>
             <p style={{ color: '#e2e8f0', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Hệ thống nhận thấy ứng dụng <strong>"{duplicateApp.title}"</strong> (URL:{' '}
-              <code>{duplicateApp.frontendUrl || 'Chưa có URL'}</code>) đã có sẵn trong danh mục App Store Workspace của bạn.
+              The application <strong>"{duplicateApp.title}"</strong> (URL:{' '}
+              <code>{duplicateApp.frontendUrl || 'No URL'}</code>) already exists in your workspace catalog.
             </p>
             <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-              AI vừa phân tích xong các thông tin và đặc tả kỹ thuật SRS mới nhất từ kho mã nguồn. Bạn muốn thực hiện hành động nào?
+              AI has analyzed and extracted the latest metadata and SRS specifications. What would you like to do?
             </p>
           </div>
 
@@ -729,9 +721,9 @@ export function AddAppModal({
               style={{ padding: '0.85rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>🔄 Cập Nhật Thông Tin Mới Nhất</div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>🔄 Overwrite with Latest AI Data</div>
                 <div style={{ fontSize: '0.78rem', opacity: 0.85, fontWeight: 400 }}>
-                  Ghi đè thông tin, tech notes & đặc tả SRS mới nhất từ AI vào ứng dụng này
+                  Update project metadata, architecture notes, and SRS specifications
                 </div>
               </div>
               <CheckCircleIcon size={20} />
@@ -744,9 +736,9 @@ export function AddAppModal({
               style={{ padding: '0.85rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>✏️ Xem Lại & Chỉnh Sửa Chi Tiết</div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>✏️ Review & Edit Fields Manually</div>
                 <div style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 400 }}>
-                  Kiểm tra từng trường dữ liệu trước khi lưu cập nhật
+                  Inspect and modify each field before saving
                 </div>
               </div>
               <span>➔</span>
@@ -762,9 +754,9 @@ export function AddAppModal({
               style={{ padding: '0.85rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
               <div style={{ textAlign: 'left' }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>➕ Tạo Thành 1 Ứng Dụng Mới Riêng Biệt</div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>➕ Create as Separate Application</div>
                 <div style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 400 }}>
-                  Thêm mới hoàn toàn dưới dạng một bản sao độc lập
+                  Add as a new standalone record without modifying existing app
                 </div>
               </div>
               <PlusIcon size={18} />
@@ -773,7 +765,7 @@ export function AddAppModal({
 
           <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Đóng
+              Close
             </button>
           </div>
         </div>
@@ -800,57 +792,61 @@ export function AddAppModal({
               <SparklesIcon size={16} />
               <span>
                 {duplicateApp
-                  ? `Đang xem lại dữ liệu trích xuất để cập nhật cho ứng dụng "${duplicateApp.title}"`
-                  : 'AI đã tự động trích xuất thông tin & đặc tả kỹ thuật thành công!'}
+                  ? `Reviewing extracted data to update "${duplicateApp.title}"`
+                  : 'AI successfully extracted application metadata & SRS specifications!'}
               </span>
             </div>
           )}
 
-          {/* Section 1: Thông tin nhận diện & trạng thái */}
+          {/* Section 1: Identity & Status */}
           <div className="form-section-title">
-            <span>🏷️</span> 1. Thông Tin Nhận Diện & Trạng Thái
+            <span>🏷️</span> 1. Identity & Status
           </div>
           <div className="form-grid-2">
             <div className="form-group">
-              <label>Tên ứng dụng:</label>
+              <label>Application Name:</label>
               <input
                 type="text"
                 className="input-text"
                 value={formData.title || ''}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="VD: Token Wallet, Payment App..."
+                placeholder="e.g. App Shelf, LifeDashboard..."
                 required
               />
             </div>
 
             <div className="form-group">
-              <label>Danh mục (Category):</label>
+              <label>Category:</label>
               <input
                 type="text"
                 className="input-text"
                 value={formData.category || ''}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                placeholder="VD: Web App, AI Tool..."
+                placeholder="e.g. Web App, AI Tool, System..."
               />
             </div>
           </div>
 
           <div className="form-grid-3" style={{ marginTop: '0.85rem' }}>
             <div className="form-group">
-              <label>Database Supabase:</label>
+              <label>Database Layer:</label>
               <select
                 className="input-select"
-                value={formData.database || 'JH Supabase Data 1'}
+                value={formData.database || 'Neon PostgreSQL'}
                 onChange={(e) => setFormData({ ...formData, database: e.target.value })}
               >
-                <option value="JH Supabase Data 1">JH Supabase Data 1</option>
-                <option value="JH Supabase Data 2">JH Supabase Data 2</option>
-                <option value="JH Supabase NoData">JH Supabase NoData</option>
+                <option value="Supabase LifeDashboard">Supabase LifeDashboard</option>
+                <option value="Supabase FinMatchAI">Supabase FinMatchAI</option>
+                <option value="Neon PostgreSQL">Neon PostgreSQL</option>
+                <option value="Neon Database">Neon Database</option>
+                <option value="Browser State & Local Storage">Browser State & Local Storage</option>
+                <option value="Local Storage">Local Storage</option>
+                <option value="Local SQLite">Local SQLite</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label>Trạng thái:</label>
+              <label>Status:</label>
               <select
                 className="input-select"
                 value={formData.status || 'Development'}
@@ -864,7 +860,7 @@ export function AddAppModal({
             </div>
 
             <div className="form-group">
-              <label>Mức độ ưu tiên:</label>
+              <label>Priority:</label>
               <select
                 className="input-select"
                 value={formData.priority || 'Medium'}
@@ -877,58 +873,58 @@ export function AddAppModal({
             </div>
           </div>
 
-          {/* Section 2: Hạ tầng & Mô tả */}
+          {/* Section 2: Infrastructure & Description */}
           <div className="form-section-title">
-            <span>🌐</span> 2. Hạ Tầng & Mô Tả Ứng Dụng
+            <span>🌐</span> 2. Infrastructure & Description
           </div>
           <div className="form-group">
-            <label>URL Frontend Web App:</label>
+            <label>Frontend Web App URL:</label>
             <input
               type="url"
               className="input-text"
               value={formData.frontendUrl || ''}
               onChange={(e) => setFormData({ ...formData, frontendUrl: e.target.value })}
-              placeholder="https://example.vercel.app"
+              placeholder="https://example.minkoi.org"
             />
           </div>
 
           <div className="form-grid-2" style={{ marginTop: '0.85rem' }}>
             <div className="form-group">
-              <label>Mô tả tóm tắt ứng dụng:</label>
+              <label>Summary Description:</label>
               <textarea
                 className="input-text"
                 rows={3}
                 value={formData.description || ''}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Mô tả mục tiêu, đối tượng sử dụng..."
+                placeholder="Describe goals, target users, and key features..."
               />
             </div>
 
             <div className="form-group">
-              <label>Ghi chú kỹ thuật & Kiến trúc:</label>
+              <label>Architecture & Tech Notes:</label>
               <textarea
                 className="input-text"
                 rows={3}
                 value={formData.techNotes || ''}
                 onChange={(e) => setFormData({ ...formData, techNotes: e.target.value })}
-                placeholder="Ghi chú về stack, port, env, repo..."
+                placeholder="Notes on stack, port, env, repo..."
               />
             </div>
           </div>
 
-          {/* Section 3: Lộ trình & Đặc tả SRS */}
+          {/* Section 3: Roadmap & SRS */}
           <div className="form-section-title">
-            <span>📋</span> 3. Lộ Trình & Bản Đặc Tả Kỹ Thuật (SRS)
+            <span>📋</span> 3. Roadmap & Technical Specification (SRS)
           </div>
 
           {/* Backlog Tasks */}
           <div className="form-group">
-            <label>Backlog / Lộ trình tính năng ({backlogList.length} task):</label>
+            <label>Backlog Tasks ({backlogList.length}):</label>
             <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
               <input
                 type="text"
                 className="input-text"
-                placeholder="Thêm tính năng hoặc task mới..."
+                placeholder="Add new feature or task..."
                 value={newBacklogTitle}
                 onChange={(e) => setNewBacklogTitle(e.target.value)}
                 onKeyDown={(e) => {
@@ -939,7 +935,7 @@ export function AddAppModal({
                 }}
               />
               <button type="button" className="btn btn-secondary" onClick={handleAddBacklogItem}>
-                Thêm
+                Add
               </button>
             </div>
 
@@ -974,13 +970,19 @@ export function AddAppModal({
           </div>
 
           <div className="form-group" style={{ marginTop: '0.85rem' }}>
-            <label>Đặc tả kỹ thuật tiếng Việt (SRS Markdown):</label>
+            <label>Technical Specification (SRS Markdown):</label>
             <textarea
               className="input-text"
               rows={5}
-              value={formData.specVi || ''}
-              onChange={(e) => setFormData({ ...formData, specVi: e.target.value })}
-              placeholder="# 1. Giới thiệu tổng quan..."
+              value={formData.specEn || formData.specVi || ''}
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  specEn: e.target.value,
+                  specVi: e.target.value,
+                });
+              }}
+              placeholder="# 1. Overview & Architecture..."
             />
           </div>
 
@@ -1001,19 +1003,19 @@ export function AddAppModal({
                 else onClose();
               }}
             >
-              Quay lại
+              Back
             </button>
 
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Hủy
+                Cancel
               </button>
               <button type="submit" className="btn btn-primary" disabled={isSaving || !formData.title?.trim()}>
                 {isSaving
-                  ? 'Đang lưu...'
+                  ? 'Saving...'
                   : duplicateApp
-                  ? 'Lưu Cập Nhật Ứng Dụng'
-                  : 'Tạo Ứng Dụng Mới'}
+                  ? 'Save Updates'
+                  : 'Create Application'}
               </button>
             </div>
           </div>

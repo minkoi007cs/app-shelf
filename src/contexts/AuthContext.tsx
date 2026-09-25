@@ -39,6 +39,11 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const ADMIN_EMAILS = [
+  'johnny.khoihoang@gmail.com',
+  'hoang.hoa@gmail.com',
+];
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [permissions, setPermissions] = useState<UserPermissions | null>(null);
@@ -48,7 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   async function loadPermissions(userId: string, email: string) {
-    const isOwnerAdmin = email.toLowerCase() === 'hoang.hoa@gmail.com';
+    const normalizedEmail = email.toLowerCase().trim();
+    const isOwnerAdmin = ADMIN_EMAILS.includes(normalizedEmail);
 
     // Always upsert with unprivileged defaults so RLS "self register unprivileged" policy passes.
     // Owner admin privilege is enforced client-side after reading the DB row.
@@ -90,6 +96,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         can_read_app_wallet: true,
         can_edit_app_wallet: true,
       });
+
+      if (isOwnerAdmin && data?.role !== 'admin') {
+        try {
+          await supabase
+            .from('aw_user_permissions')
+            .update({
+              role: 'admin',
+              can_read_token_wallet: true,
+              can_edit_token_wallet: true,
+              can_read_payments: true,
+              can_edit_payments: true,
+              can_read_app_wallet: true,
+              can_edit_app_wallet: true,
+            })
+            .eq('user_id', userId);
+        } catch (err) {
+          console.warn('Could not sync admin status to DB:', err);
+        }
+      }
     } else if (data) {
       setPermissions({
         role: data.role,

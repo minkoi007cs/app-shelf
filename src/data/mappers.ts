@@ -298,11 +298,18 @@ export function appProjectToRow(project: AppProject): AppProjectRow {
   return {
     id: project.id,
     title: project.title,
+    name: project.title,
     url: project.frontendUrl || '',
     category: project.category || 'Web App',
+    type: project.category || 'Web App',
     status: project.status || 'Development',
     priority: project.priority || 'Medium',
     description: project.description || '',
+    developer: project.author || 'minkoi007cs',
+    github: project.github || '',
+    hosting: project.hosting || '',
+    tech_stack: project.techStack || '',
+    database: project.database || '',
     is_disabled: Boolean(project.isDisabled),
     tech_notes: serializedNotes,
   };

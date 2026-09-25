@@ -87,64 +87,64 @@ export function ShareAppsModal({
   // Generate friendly message text based on audience
   const generatedMessage = useMemo(() => {
     const count = selectedApps.length;
-    if (count === 0) return 'Vui lòng chọn ít nhất một ứng dụng để chia sẻ.';
+    if (count === 0) return 'Please select at least one application to share.';
 
     if (audience === 'friends') {
       const appLines = selectedApps
         .map((app, idx) => {
           const link = app.frontendUrl || `${origin}/app-wallet/${app.id}`;
-          return `${idx + 1}. 🚀 **${app.title}** (${app.category || 'Web App'})\n   - ${app.description || 'Ứng dụng hữu ích, giao diện mượt mà.'}\n   👉 Trải nghiệm: ${link}`;
+          return `${idx + 1}. 🚀 **${app.title}** (${app.category || 'Web App'})\n   - ${app.description || 'Useful application with modern responsive interface.'}\n   👉 Experience: ${link}`;
         })
         .join('\n\n');
 
-      return `Chào bạn! Mình muốn chia sẻ với bạn bộ sưu tập ${count} ứng dụng cực kỳ tiện ích:\n\n${appLines}\n\n✨ Xem toàn bộ danh sách tại: ${shareWebLink}\nChúc bạn có những trải nghiệm thật vui vẻ và hữu ích! 😊`;
+      return `Hello! I would like to share with you a curated collection of ${count} useful applications:\n\n${appLines}\n\n✨ Browse the complete collection at: ${shareWebLink}\nEnjoy testing and exploring! 😊`;
     }
 
     if (audience === 'colleagues') {
       const appLines = selectedApps
         .map((app, idx) => {
-          const liveUrl = app.frontendUrl ? `\n   • Trực tiếp (Live): ${app.frontendUrl}` : '';
-          const repoUrl = app.github ? `\n   • Mã nguồn (Repo): ${app.github}` : '';
+          const liveUrl = app.frontendUrl ? `\n   • Production Live: ${app.frontendUrl}` : '';
+          const repoUrl = app.github ? `\n   • Repository: ${app.github}` : '';
           const tech = app.techStack ? `\n   • Tech stack: ${app.techStack}` : '';
-          const db = app.database ? `\n   • Cơ sở dữ liệu: ${app.database}` : '';
-          const hosting = app.hosting ? `\n   • Nền tảng hosting: ${app.hosting}` : '';
+          const db = app.database ? `\n   • Database: ${app.database}` : '';
+          const hosting = app.hosting ? `\n   • Hosting platform: ${app.hosting}` : '';
 
-          return `${idx + 1}. 💼 **${app.title}** [${app.status || 'Active'}] - ${app.category || 'Hệ thống'}\n   • Mô tả: ${app.description || 'Ứng dụng nội bộ & sản phẩm số.'}${liveUrl}${repoUrl}${tech}${db}${hosting}`;
+          return `${idx + 1}. 💼 **${app.title}** [${app.status || 'Active'}] - ${app.category || 'System'}\n   • Description: ${app.description || 'Production web application & workspace tool.'}${liveUrl}${repoUrl}${tech}${db}${hosting}`;
         })
         .join('\n\n');
 
-      return `Hi anh/chị và các bạn đồng nghiệp,\n\nMình xin chia sẻ thông tin chi tiết về ${count} ứng dụng/dự án trong hệ thống:\n\n${appLines}\n\n📌 Liên kết tổng hợp & hồ sơ dự án: ${shareWebLink}\nMọi người xem và đóng góp ý kiến giúp mình nhé! Cảm ơn mọi người!`;
+      return `Hi team and colleagues,\n\nHere is the detailed overview of ${count} deployed systems and projects:\n\n${appLines}\n\n📌 System portfolio & documentation link: ${shareWebLink}\nFeel free to review and share your feedback!`;
     }
 
-    // Teachers
+    // Teachers / Instructors
     const appLines = selectedApps
       .map((app, idx) => {
-        const live = app.frontendUrl ? `\n   - Liên kết thực nghiệm: ${app.frontendUrl}` : '';
+        const live = app.frontendUrl ? `\n   - Production URL: ${app.frontendUrl}` : '';
         const specs = `${origin}/app-wallet/${app.id}?tab=specs`;
-        const tech = app.techStack ? `\n   - Công nghệ áp dụng: ${app.techStack}` : '';
-        const db = app.database ? `\n   - Quản trị dữ liệu: ${app.database}` : '';
+        const tech = app.techStack ? `\n   - Technology Stack: ${app.techStack}` : '';
+        const db = app.database ? `\n   - Data Architecture: ${app.database}` : '';
 
-        return `${idx + 1}. 🎓 **${app.title}** (${app.category || 'Đồ án / Sản phẩm'})\n   - Mục tiêu: ${app.description || 'Nghiên cứu và triển khai ứng dụng thực tiễn.'}${tech}${db}${live}\n   - Hồ sơ đặc tả SRS: ${specs}`;
+        return `${idx + 1}. 🎓 **${app.title}** (${app.category || 'Project / Product'})\n   - Objective: ${app.description || 'Research and engineering implementation.'}${tech}${db}${live}\n   - SRS Specification: ${specs}`;
       })
       .join('\n\n');
 
-    return `Kính gửi Quý Thầy/Cô,\n\nEm xin phép được báo cáo và gửi tới Thầy/Cô thông tin cùng liên kết trải nghiệm của ${count} ứng dụng/sản phẩm phần mềm:\n\n${appLines}\n\n📖 Danh mục hồ sơ & đặc tả hệ thống: ${shareWebLink}\n\nEm rất mong nhận được những góp ý quý báu của Thầy/Cô để hoàn thiện các sản phẩm tốt hơn.\nEm xin chân thành cảm ơn Thầy/Cô!`;
+    return `Dear Professor / Instructor,\n\nI would like to submit and share the live deployment and specifications of ${count} software systems:\n\n${appLines}\n\n📖 Portfolio Directory & System Specifications: ${shareWebLink}\n\nI look forward to receiving your valuable feedback and guidance.\nThank you very much!`;
   }, [selectedApps, audience, origin, shareWebLink]);
 
   // Generate Markdown table/list
   const generatedMarkdown = useMemo(() => {
     const count = selectedApps.length;
-    if (count === 0) return 'Vui lòng chọn ứng dụng.';
+    if (count === 0) return 'Please select applications.';
 
     const tableRows = selectedApps
       .map((app) => {
-        const liveLink = app.frontendUrl ? `[Truy cập](${app.frontendUrl})` : '—';
-        const specsLink = `[Xem Specs](${origin}/app-wallet/${app.id}?tab=specs)`;
+        const liveLink = app.frontendUrl ? `[Visit Live](${app.frontendUrl})` : '—';
+        const specsLink = `[View Specs](${origin}/app-wallet/${app.id}?tab=specs)`;
         return `| **${app.title}** | ${app.category || 'Web App'} | \`${app.status}\` | ${liveLink} | ${specsLink} |`;
       })
       .join('\n');
 
-    return `### 📦 Danh Mục Ứng Dụng (${count} ứng dụng)\n\n| Tên Ứng Dụng | Danh Mục | Trạng Thái | Trải Nghiệm | Đặc Tả Kỹ Thuật |\n| :--- | :--- | :--- | :--- | :--- |\n${tableRows}\n\n> 🌐 **Kho ứng dụng đầy đủ**: [App Store Workspace](${shareWebLink})\n`;
+    return `### 📦 Application Directory (${count} apps)\n\n| Application Name | Category | Status | Live Demo | Technical Specs |\n| :--- | :--- | :--- | :--- | :--- |\n${tableRows}\n\n> 🌐 **Full Application Workspace**: [MinKoi's App Store Workspace](${shareWebLink})\n`;
   }, [selectedApps, origin, shareWebLink]);
 
   // Copy helper
@@ -165,7 +165,7 @@ export function ShareAppsModal({
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2500);
     } catch {
-      alert('Không thể tự động sao chép. Vui lòng chọn và sao chép thủ công.');
+      alert('Unable to copy automatically. Please select and copy manually.');
     }
   };
 
@@ -176,7 +176,7 @@ export function ShareAppsModal({
     if (!canNativeShare) return;
     try {
       await navigator.share({
-        title: selectedApps.length === 1 ? selectedApps[0].title : 'Danh mục ứng dụng chia sẻ',
+        title: selectedApps.length === 1 ? selectedApps[0].title : 'Shared Applications Directory',
         text: generatedMessage,
         url: shareWebLink,
       });
@@ -208,25 +208,25 @@ export function ShareAppsModal({
             </div>
             <div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc', margin: 0 }}>
-                Chia Sẻ Ứng Dụng
+                Share Applications
               </h2>
               <p style={{ fontSize: '0.82rem', color: '#94a3b8', margin: '2px 0 0 0' }}>
-                Chia sẻ một, một vài hoặc toàn bộ kho ứng dụng cho bạn bè, đồng nghiệp hoặc thầy cô
+                Share individual apps or your full portfolio with friends, colleagues, or instructors
               </p>
             </div>
           </div>
 
-          <button className="portfolio-close-btn" onClick={onClose} title="Đóng">
+          <button className="portfolio-close-btn" onClick={onClose} title="Close">
             ✕
           </button>
         </div>
 
         {/* Modal Scrollable Body */}
         <div className="portfolio-body share-modal-body" style={{ padding: '1.25rem 1.5rem' }}>
-          {/* SECTION 1: Chọn đối tượng người nhận (Audience Persona) */}
+          {/* SECTION 1: Audience Persona */}
           <div className="share-section">
             <label className="share-section-label">
-              <span>🎯</span> Chọn Đối Tượng Người Nhận:
+              <span>🎯</span> Select Target Audience:
             </label>
             <div className="share-audience-pills">
               <button
@@ -236,8 +236,8 @@ export function ShareAppsModal({
               >
                 <span className="persona-emoji">🤝</span>
                 <div className="persona-text">
-                  <strong>Bạn Bè</strong>
-                  <small>Thân thiện, gợi ý app hay & tiện ích</small>
+                  <strong>Friends</strong>
+                  <small>Casual, useful app recommendations</small>
                 </div>
               </button>
 
@@ -248,8 +248,8 @@ export function ShareAppsModal({
               >
                 <span className="persona-emoji">💼</span>
                 <div className="persona-text">
-                  <strong>Đồng Nghiệp</strong>
-                  <small>Chuyên nghiệp, tech stack & repo</small>
+                  <strong>Colleagues</strong>
+                  <small>Professional, tech stack & repo</small>
                 </div>
               </button>
 
@@ -260,18 +260,18 @@ export function ShareAppsModal({
               >
                 <span className="persona-emoji">🎓</span>
                 <div className="persona-text">
-                  <strong>Thầy Cô</strong>
-                  <small>Trang trọng, báo cáo sản phẩm & SRS</small>
+                  <strong>Instructors</strong>
+                  <small>Academic, project reports & SRS</small>
                 </div>
               </button>
             </div>
           </div>
 
-          {/* SECTION 2: Lựa chọn danh sách Apps */}
+          {/* SECTION 2: Apps Selection */}
           <div className="share-section" style={{ marginTop: '1.15rem' }}>
             <div className="share-section-header">
               <label className="share-section-label" style={{ margin: 0 }}>
-                <span>📦</span> Ứng Dụng Được Chia Sẻ ({selectedApps.length} / {allApps.length}):
+                <span>📦</span> Shared Applications ({selectedApps.length} / {allApps.length}):
               </label>
 
               <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
@@ -281,7 +281,7 @@ export function ShareAppsModal({
                   onClick={selectAll}
                   disabled={selectedApps.length === allApps.length}
                 >
-                  Chọn tất cả
+                  Select All
                 </button>
                 <button
                   type="button"
@@ -289,7 +289,7 @@ export function ShareAppsModal({
                   onClick={deselectAll}
                   disabled={selectedApps.length === 0}
                 >
-                  Bỏ chọn
+                  Deselect All
                 </button>
                 <button
                   type="button"
@@ -297,7 +297,7 @@ export function ShareAppsModal({
                   onClick={() => setIsAppPickerExpanded((v) => !v)}
                   style={{ color: '#60a5fa' }}
                 >
-                  {isAppPickerExpanded ? 'Thu gọn danh sách ▲' : 'Tùy chỉnh apps ▼'}
+                  {isAppPickerExpanded ? 'Collapse list ▲' : 'Customize apps ▼'}
                 </button>
               </div>
             </div>
@@ -308,7 +308,7 @@ export function ShareAppsModal({
                 <input
                   type="text"
                   className="input-text share-picker-search"
-                  placeholder="Tìm ứng dụng trong danh sách..."
+                  placeholder="Search applications in list..."
                   value={appSearchQuery}
                   onChange={(e) => setAppSearchQuery(e.target.value)}
                 />
@@ -334,7 +334,7 @@ export function ShareAppsModal({
                   })}
                   {filteredAppsForPicker.length === 0 && (
                     <div style={{ padding: '0.5rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.82rem' }}>
-                      Không tìm thấy ứng dụng phù hợp
+                      No matching applications found
                     </div>
                   )}
                 </div>
@@ -345,7 +345,7 @@ export function ShareAppsModal({
             <div className="share-selected-chips">
               {selectedApps.length === 0 ? (
                 <div className="share-no-selection">
-                  ⚠️ Chưa có ứng dụng nào được chọn. Vui lòng tick chọn ít nhất 1 ứng dụng bên trên.
+                  ⚠️ No applications selected. Please check at least one application above.
                 </div>
               ) : (
                 selectedApps.map((app) => (
@@ -355,7 +355,7 @@ export function ShareAppsModal({
                       type="button"
                       className="share-chip-remove"
                       onClick={() => toggleApp(app.id)}
-                      title="Bỏ ứng dụng này"
+                      title="Remove this application"
                     >
                       ×
                     </button>
@@ -365,7 +365,7 @@ export function ShareAppsModal({
             </div>
           </div>
 
-          {/* SECTION 3: Định dạng chia sẻ & Nội dung xuất */}
+          {/* SECTION 3: Formats & Output Content */}
           <div className="share-section" style={{ marginTop: '1.25rem' }}>
             <div className="share-format-tabs">
               <button
@@ -374,7 +374,7 @@ export function ShareAppsModal({
                 onClick={() => setShareFormat('link')}
               >
                 <span>🔗</span>
-                <span>Liên Kết Chia Sẻ Web</span>
+                <span>Web Share Link</span>
               </button>
               <button
                 type="button"
@@ -382,7 +382,7 @@ export function ShareAppsModal({
                 onClick={() => setShareFormat('message')}
               >
                 <span>💬</span>
-                <span>Tin Nhắn Giới Thiệu</span>
+                <span>Intro Message</span>
               </button>
               <button
                 type="button"
@@ -390,7 +390,7 @@ export function ShareAppsModal({
                 onClick={() => setShareFormat('markdown')}
               >
                 <span>📝</span>
-                <span>Định Dạng Markdown</span>
+                <span>Markdown Format</span>
               </button>
             </div>
 
@@ -398,7 +398,7 @@ export function ShareAppsModal({
             {shareFormat === 'link' && (
               <div className="share-format-box">
                 <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
-                  Người nhận mở link này sẽ xem được đúng danh sách {selectedApps.length} ứng dụng đã chọn trong giao diện App Wallet trực quan:
+                  Recipients opening this link will view the selected {selectedApps.length} applications in the interactive MinKoi's App Store Workspace:
                 </p>
                 <div className="share-link-input-row">
                   <input
@@ -417,12 +417,12 @@ export function ShareAppsModal({
                     {isCopied ? (
                       <>
                         <CheckIcon size={16} />
-                        <span>Đã chép!</span>
+                        <span>Copied!</span>
                       </>
                     ) : (
                       <>
                         <CopyIcon size={16} />
-                        <span>Sao chép link</span>
+                        <span>Copy Link</span>
                       </>
                     )}
                   </button>
@@ -435,7 +435,7 @@ export function ShareAppsModal({
                     rel="noreferrer"
                     className="btn btn-secondary btn-sm"
                   >
-                    <span>Mở thử liên kết</span>
+                    <span>Open Live Link</span>
                     <ExternalLinkIcon size={13} />
                   </a>
 
@@ -447,7 +447,7 @@ export function ShareAppsModal({
                       style={{ color: '#a78bfa', borderColor: 'rgba(167, 139, 250, 0.4)' }}
                     >
                       <ShareIcon size={14} />
-                      <span>Gửi qua Zalo / Messenger / Mail...</span>
+                      <span>Share via Apps / Mail...</span>
                     </button>
                   )}
                 </div>
@@ -459,7 +459,7 @@ export function ShareAppsModal({
               <div className="share-format-box">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
                   <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                    Nội dung văn bản định dạng sẵn (phù hợp gửi qua Zalo, Messenger, SMS, Email):
+                    Pre-formatted text message (suitable for Messaging, Slack, SMS, Email):
                   </span>
                   <button
                     type="button"
@@ -469,12 +469,12 @@ export function ShareAppsModal({
                     {isCopied ? (
                       <>
                         <CheckIcon size={14} />
-                        <span>Đã chép tin nhắn!</span>
+                        <span>Message Copied!</span>
                       </>
                     ) : (
                       <>
                         <CopyIcon size={14} />
-                        <span>Sao chép tin nhắn</span>
+                        <span>Copy Message</span>
                       </>
                     )}
                   </button>
@@ -494,7 +494,7 @@ export function ShareAppsModal({
               <div className="share-format-box">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
                   <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                    Định dạng bảng Markdown chuẩn (thích hợp dán vào GitHub README, Notion, Slack):
+                    Standard Markdown table format (suitable for GitHub README, Notion, Slack):
                   </span>
                   <button
                     type="button"
@@ -504,12 +504,12 @@ export function ShareAppsModal({
                     {isCopied ? (
                       <>
                         <CheckIcon size={14} />
-                        <span>Đã chép Markdown!</span>
+                        <span>Markdown Copied!</span>
                       </>
                     ) : (
                       <>
                         <CopyIcon size={14} />
-                        <span>Sao chép Markdown</span>
+                        <span>Copy Markdown</span>
                       </>
                     )}
                   </button>
@@ -529,11 +529,11 @@ export function ShareAppsModal({
         {/* Modal Footer */}
         <div className="modal-footer" style={{ justifyContent: 'space-between' }}>
           <div style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
-            Đã chọn <strong>{selectedApps.length}</strong> ứng dụng
+            Selected <strong>{selectedApps.length}</strong> applications
           </div>
           <div style={{ display: 'flex', gap: '0.6rem' }}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Đóng
+              Close
             </button>
             <button
               type="button"
@@ -551,12 +551,12 @@ export function ShareAppsModal({
               {isCopied ? (
                 <>
                   <CheckIcon size={15} />
-                  <span>Đã sao chép!</span>
+                  <span>Copied!</span>
                 </>
               ) : (
                 <>
                   <CopyIcon size={15} />
-                  <span>Sao chép kết quả</span>
+                  <span>Copy Output</span>
                 </>
               )}
             </button>

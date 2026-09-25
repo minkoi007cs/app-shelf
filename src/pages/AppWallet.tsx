@@ -18,6 +18,7 @@ import { AppPortfolioModal } from '../components/AppPortfolioModal';
 import { AddAppModal } from '../components/AddAppModal';
 import { ShareAppsModal } from '../components/ShareAppsModal';
 import { removedIds } from '../data/syncPolicy';
+import { MINKOI_DEFAULT_APPS } from '../data/minKoiApps';
 import { useAuth } from '../contexts/AuthContext';
 import {
   SearchIcon,
@@ -144,7 +145,8 @@ export default function AppWallet() {
     table: 'aw_app_projects',
     rowToItem: rowToAppProject,
     itemToRow: appProjectToRow,
-    seed: (loaded) => loaded,
+    seed: (loaded) =>
+      loaded && loaded.length > 0 ? loaded : MINKOI_DEFAULT_APPS.map(({ backlog, ...rest }) => rest),
   });
 
   const { items: backlogItems, setItems: setBacklogItems } = useSyncedCollection<
@@ -157,7 +159,10 @@ export default function AppWallet() {
       projectId: row.project_id,
     }),
     itemToRow: (item) => backlogItemToRow(item, item.projectId),
-    seed: (loaded) => loaded,
+    seed: (loaded) =>
+      loaded && loaded.length > 0
+        ? loaded
+        : MINKOI_DEFAULT_APPS.flatMap((p) => (p.backlog || []).map((b) => ({ ...b, projectId: p.id }))),
   });
 
   const sharedAppsParam = searchParams.get('apps');
@@ -248,9 +253,9 @@ export default function AppWallet() {
 
     const targets = apps.filter((a) => a.frontendUrl);
     const limit = 5;
-    const nowTimeStr = new Date().toLocaleDateString('vi-VN', {
+    const nowTimeStr = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
-      month: '2-digit',
+      month: 'short',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
@@ -289,7 +294,7 @@ export default function AppWallet() {
               )
             );
           } catch (dbErr) {
-            console.error('Lỗi lưu kết quả kiểm tra health:', dbErr);
+            console.error('Failed to save health check result:', dbErr);
           }
         })
       );
@@ -302,9 +307,9 @@ export default function AppWallet() {
   const handleToggleManualCheck = async (app: AppProject) => {
     const nextChecked = !app.manualChecked;
     const nextCheckedAt = nextChecked
-      ? new Date().toLocaleDateString('vi-VN', {
+      ? new Date().toLocaleDateString('en-US', {
           day: '2-digit',
-          month: '2-digit',
+          month: 'short',
           year: 'numeric',
         })
       : '';
@@ -326,12 +331,12 @@ export default function AppWallet() {
       const row = appProjectToRow(updatedApp);
       const { error: upErr } = await supabase.from('aw_app_projects').update(row).eq('id', app.id);
       if (upErr) {
-        console.error('Lỗi lưu xác nhận kiểm tra:', upErr);
-        alert('Không thể lưu trạng thái xác nhận: ' + upErr.message);
+        console.error('Failed to save verification status:', upErr);
+        alert('Failed to save verification status: ' + upErr.message);
       }
     } catch (err: any) {
-      console.error('Lỗi lưu xác nhận:', err);
-      alert('Không thể lưu trạng thái xác nhận: ' + (err?.message || 'Lỗi không xác định'));
+      console.error('Failed to save verification status:', err);
+      alert('Failed to save verification status: ' + (err?.message || 'Unknown error'));
     }
   };
 
@@ -340,7 +345,7 @@ export default function AppWallet() {
     const row = appProjectToRow(newProj as AppProject);
     const { error: saveErr } = await supabase.from('aw_app_projects').insert(row);
     if (saveErr) {
-      throw new Error('Lỗi lưu vào Supabase: ' + saveErr.message);
+      throw new Error('Failed to save to Supabase: ' + saveErr.message);
     }
 
     if (backlog.length > 0) {
@@ -359,7 +364,7 @@ export default function AppWallet() {
     const row = appProjectToRow(updated);
     const { error: saveErr } = await supabase.from('aw_app_projects').upsert(row);
     if (saveErr) {
-      throw new Error('Lỗi cập nhật vào Supabase: ' + saveErr.message);
+      throw new Error('Failed to update in Supabase: ' + saveErr.message);
     }
 
     setProjectItems((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
@@ -440,10 +445,10 @@ export default function AppWallet() {
                 <span className="store-share-banner-icon">🎁</span>
                 <div>
                   <div className="store-share-banner-title">
-                    Danh Mục Ứng Dụng Được Chia Sẻ
+                    Shared Applications Directory
                   </div>
                   <div className="store-share-banner-desc">
-                    Đang hiển thị {filteredApps.length} ứng dụng được lựa chọn để chia sẻ với bạn.
+                    Displaying {filteredApps.length} applications curated for you.
                   </div>
                 </div>
               </div>
@@ -457,7 +462,7 @@ export default function AppWallet() {
                   setSearchParams(newParams);
                 }}
               >
-                <span>Xem Toàn Bộ Kho ({apps.length} apps)</span>
+                <span>View Full Catalog ({apps.length} apps)</span>
               </button>
             </div>
           )}
@@ -468,14 +473,14 @@ export default function AppWallet() {
               <div className="store-title-block">
                 <h2>
                   <AppStoreIcon size={26} />
-                  App Store Workspace
+                  MinKoi's App Store Workspace
                 </h2>
-                <p>Bộ sưu tập các ứng dụng & sản phẩm hệ thống</p>
+                <p>Comprehensive portfolio of production applications &amp; systems</p>
               </div>
 
               <div className="store-stats-pills">
                 <div className="store-stat-pill">
-                  Tổng số app: <strong>{apps.length}</strong>
+                  Total Apps: <strong>{apps.length}</strong>
                 </div>
                 {healthyCount > 0 && (
                   <div className="store-stat-pill active-healthy">
@@ -493,7 +498,7 @@ export default function AppWallet() {
                 <input
                   type="text"
                   className="store-search-input"
-                  placeholder="Tìm kiếm ứng dụng, danh mục..."
+                  placeholder="Search applications, categories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -504,10 +509,10 @@ export default function AppWallet() {
                   type="button"
                   className="btn btn-secondary"
                   onClick={() => handleOpenShareModal()}
-                  title="Chia sẻ ứng dụng cho bạn bè, đồng nghiệp hoặc thầy cô"
+                  title="Share applications with friends, colleagues, or mentors"
                 >
                   <ShareIcon size={15} />
-                  <span>Chia Sẻ Apps</span>
+                  <span>Share Apps</span>
                 </button>
 
                 <button
@@ -517,9 +522,9 @@ export default function AppWallet() {
                     setIsSelectMode((v) => !v);
                     if (isSelectMode) setSelectedAppIds(new Set());
                   }}
-                  title="Bật/tắt chế độ chọn nhiều ứng dụng để chia sẻ"
+                  title="Toggle multi-app selection mode to share"
                 >
-                  <span>{isSelectMode ? '✓ Đang Chọn' : '☑ Chọn Nhiều'}</span>
+                  <span>{isSelectMode ? '✓ Selecting' : '☑ Multi Select'}</span>
                 </button>
 
                 <button
@@ -528,13 +533,13 @@ export default function AppWallet() {
                   disabled={isCheckingHealth}
                 >
                   <RefreshIcon size={15} className={isCheckingHealth ? 'spin-icon' : ''} />
-                  {isCheckingHealth ? 'Đang check health...' : 'Check Health'}
+                  {isCheckingHealth ? 'Checking health...' : 'Check Health'}
                 </button>
 
                 {canEdit && (
                   <button className="btn btn-primary" onClick={() => setIsAddModalOpen(true)}>
                     <PlusIcon size={16} />
-                    Thêm Dự Án
+                    Add Project
                   </button>
                 )}
               </div>
@@ -546,7 +551,7 @@ export default function AppWallet() {
                 className={`store-cat-tab ${selectedCategory === 'all' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('all')}
               >
-                Tất cả
+                All
                 <span className="store-cat-count">{apps.length}</span>
               </button>
 
@@ -588,8 +593,8 @@ export default function AppWallet() {
                   }}
                   title={
                     isSelectMode
-                      ? `${isSelected ? 'Bỏ chọn' : 'Chọn'} ${app.title}`
-                      : `Bấm để xem Portfolio chi tiết & đặc tả của ${app.title}`
+                      ? `${isSelected ? 'Deselect' : 'Select'} ${app.title}`
+                      : `Click to view portfolio details & specification for ${app.title}`
                   }
                 >
                   <div>
@@ -612,52 +617,34 @@ export default function AppWallet() {
                       </div>
                     </div>
 
-                    {/* Status Bar: Health dot + Status badge + Specs button */}
+                    {/* Single Clean Status & Metadata Row */}
                     <div className="store-card-status-bar">
                       <div
                         className="store-health-tag"
-                        title={app.healthCheckedAt ? `Kiểm tra tự động lúc: ${app.healthCheckedAt}` : 'Chưa kiểm tra tự động'}
+                        title={app.healthCheckedAt ? `Checked: ${app.healthCheckedAt}` : 'Not auto checked'}
                       >
-                        <span
-                          className={`store-health-dot ${app.healthStatus || 'unknown'}`}
-                        />
+                        <span className={`store-health-dot ${app.healthStatus || 'unknown'}`} />
                         <span>
                           {app.healthStatus === 'healthy'
-                            ? 'Healthy'
+                            ? 'Online'
                             : app.healthStatus === 'failed'
                             ? 'Down'
                             : app.healthStatus === 'checking'
                             ? 'Checking...'
-                            : 'Chưa check'}
+                            : 'Unchecked'}
                         </span>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/app-wallet/${app.id}?tab=specs`);
-                          }}
-                          title="Xem Đặc Tả Kỹ Thuật (Specification)"
-                          style={{
-                            fontSize: '0.7rem',
-                            fontWeight: 600,
-                            padding: '0.15rem 0.5rem',
-                            borderRadius: '6px',
-                            background: 'rgba(59, 130, 246, 0.15)',
-                            color: '#60a5fa',
-                            border: '1px solid rgba(59, 130, 246, 0.35)',
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '3px',
-                          }}
-                        >
-                          <span>📋</span>
-                          <span>Specs</span>
-                        </button>
                         <span className="store-status-badge">{app.status}</span>
+                        {app.manualChecked && (
+                          <span
+                            className="store-verified-pill"
+                            title={`Verified at ${app.manualCheckedAt || 'Recent'}`}
+                          >
+                            ✓
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -671,24 +658,29 @@ export default function AppWallet() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '5px',
-                          marginTop: '0.45rem',
-                          marginBottom: '0.15rem',
-                          background: app.database.includes('Data 1')
+                          marginBottom: '0.65rem',
+                          background: app.database.includes('LifeDashboard')
                             ? 'rgba(16, 185, 129, 0.12)'
-                            : app.database.includes('Data 2')
-                            ? 'rgba(99, 102, 241, 0.12)'
-                            : 'rgba(148, 163, 184, 0.12)',
-                          color: app.database.includes('Data 1')
+                            : app.database.includes('FinMatchAI')
+                            ? 'rgba(236, 72, 153, 0.12)'
+                            : app.database.includes('Neon')
+                            ? 'rgba(0, 229, 153, 0.12)'
+                            : 'rgba(99, 102, 241, 0.12)',
+                          color: app.database.includes('LifeDashboard')
                             ? '#10b981'
-                            : app.database.includes('Data 2')
-                            ? '#818cf8'
-                            : '#94a3b8',
+                            : app.database.includes('FinMatchAI')
+                            ? '#f472b6'
+                            : app.database.includes('Neon')
+                            ? '#00e599'
+                            : '#818cf8',
                           border: `1px solid ${
-                            app.database.includes('Data 1')
+                            app.database.includes('LifeDashboard')
                               ? 'rgba(16, 185, 129, 0.3)'
-                              : app.database.includes('Data 2')
-                              ? 'rgba(99, 102, 241, 0.3)'
-                              : 'rgba(148, 163, 184, 0.25)'
+                              : app.database.includes('FinMatchAI')
+                              ? 'rgba(236, 72, 153, 0.3)'
+                              : app.database.includes('Neon')
+                              ? 'rgba(0, 229, 153, 0.3)'
+                              : 'rgba(99, 102, 241, 0.3)'
                           }`,
                         }}
                       >
@@ -697,114 +689,49 @@ export default function AppWallet() {
                       </div>
                     )}
 
-                    {/* Manual Check Verification Bar */}
-                    <div className="store-manual-check-bar">
-                      <button
-                        type="button"
-                        className={`store-manual-check-btn ${app.manualChecked ? 'checked' : 'uncheck'}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (canEdit) handleToggleManualCheck(app);
-                        }}
-                        disabled={!canEdit}
-                        title={
-                          canEdit
-                            ? (app.manualChecked ? 'Bấm để hủy hoặc cập nhật ngày xác nhận' : 'Bấm để xác nhận bạn đã kiểm tra ứng dụng')
-                            : 'Trạng thái xác nhận kiểm tra'
-                        }
-                      >
-                        <span className="check-indicator">{app.manualChecked ? '✓' : '○'}</span>
-                        <span className="check-text">
-                          {app.manualChecked ? (
-                            <>
-                              <span className="check-label">Đã check</span>
-                              {app.manualCheckedAt && (
-                                <span className="check-date">• {app.manualCheckedAt}</span>
-                              )}
-                            </>
-                          ) : (
-                            <span className="check-prompt">Xác nhận đã check</span>
-                          )}
-                        </span>
-                      </button>
-                    </div>
-
                     {/* Description */}
                     <p className="store-app-desc" title={app.description}>
-                      {app.description || 'Không có mô tả cho ứng dụng này.'}
+                      {app.description || 'No description provided for this application.'}
                     </p>
                   </div>
 
-                  {/* Card Footer: OPEN Button, SPECS Button, SHARE Button & Backlog */}
-                  <div className="store-card-footer" style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                  {/* Card Footer: Clean Launch & Share actions without redundant buttons */}
+                  <div className="store-card-footer">
                     {app.frontendUrl ? (
                       <a
                         href={app.frontendUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="store-btn-open"
-                        title={`Mở ${app.title}`}
+                        title={`Launch ${app.title}`}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        MỞ
+                        Launch
                         <ExternalLinkIcon size={12} />
                       </a>
                     ) : (
+                      <span className="store-btn-open disabled">No URL</span>
+                    )}
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      {backlogCount > 0 && (
+                        <span className="store-backlog-chip" title={`${backlogCount} backlog tasks`}>
+                          {backlogCount} tasks
+                        </span>
+                      )}
+
                       <button
-                        className="store-btn-open disabled"
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/app-wallet/${app.id}?tab=settings`);
+                          handleOpenShareModal(app.id);
                         }}
+                        title={`Share ${app.title}`}
+                        className="store-card-share-btn"
                       >
-                        Chưa có URL
+                        <ShareIcon size={13} />
                       </button>
-                    )}
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/app-wallet/${app.id}?tab=specs`);
-                      }}
-                      title="Xem Portfolio & Đặc Tả Kỹ Thuật"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.25rem',
-                        padding: '0.45rem 0.55rem',
-                        background: 'rgba(59, 130, 246, 0.15)',
-                        color: '#60a5fa',
-                        border: '1px solid rgba(59, 130, 246, 0.35)',
-                        borderRadius: '9999px',
-                        fontWeight: 700,
-                        fontSize: '0.75rem',
-                        cursor: 'pointer',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <span>📋</span>
-                      <span>SPECS</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenShareModal(app.id);
-                      }}
-                      title={`Chia sẻ ${app.title} cho bạn bè, đồng nghiệp hoặc thầy cô`}
-                      className="store-card-share-btn"
-                    >
-                      <ShareIcon size={13} />
-                    </button>
-
-                    {backlogCount > 0 && (
-                      <span className="store-backlog-chip" title={`${backlogCount} công việc backlog`}>
-                        {backlogCount} task
-                      </span>
-                    )}
+                    </div>
                   </div>
                 </div>
               );
@@ -816,7 +743,7 @@ export default function AppWallet() {
                 <div className="store-card-add-icon">
                   <PlusIcon size={20} />
                 </div>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Thêm Ứng Dụng Mới</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Add New Project</span>
               </div>
             )}
           </div>
@@ -839,7 +766,7 @@ export default function AppWallet() {
                   setBacklogItems((prev) => prev.filter((b) => b.projectId !== deleteId));
                   navigate('/app-wallet');
                 } catch (err: any) {
-                  alert('Lỗi xóa dự án: ' + (err?.message || ''));
+                  alert('Error deleting project: ' + (err?.message || ''));
                 }
               }}
               onBacklogChange={(nextBacklog) => {
@@ -866,7 +793,7 @@ export default function AppWallet() {
             <div className="store-selection-bar">
               <div className="store-selection-bar-info">
                 <span>
-                  Đã chọn <strong>{selectedAppIds.size}</strong> ứng dụng
+                  Selected <strong>{selectedAppIds.size}</strong> apps
                 </span>
               </div>
               <div className="store-selection-bar-actions">
@@ -881,7 +808,7 @@ export default function AppWallet() {
                     }
                   }}
                 >
-                  {selectedAppIds.size === filteredApps.length ? 'Bỏ chọn' : 'Chọn tất cả'}
+                  {selectedAppIds.size === filteredApps.length ? 'Deselect all' : 'Select all'}
                 </button>
                 <button
                   type="button"
@@ -889,7 +816,7 @@ export default function AppWallet() {
                   onClick={() => handleOpenShareModal()}
                 >
                   <ShareIcon size={14} />
-                  <span>Chia Sẻ ({selectedAppIds.size})</span>
+                  <span>Share ({selectedAppIds.size})</span>
                 </button>
                 <button
                   type="button"
@@ -899,7 +826,7 @@ export default function AppWallet() {
                     setSelectedAppIds(new Set());
                   }}
                 >
-                  Thoát
+                  Exit
                 </button>
               </div>
             </div>

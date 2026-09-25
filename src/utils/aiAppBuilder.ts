@@ -106,31 +106,10 @@ function extractHeuristically(
     else if (isAI) category = 'AI Tool';
     else if (gh.topics.length > 0) category = gh.topics[0].toUpperCase();
 
-    const desc = gh.description || gh.packageJson?.description || `Ứng dụng ${cleanTitle} được phát triển bởi ${gh.owner || 'Developer'}.`;
-
-    const specVi = `# 1. Giới Thiệu & Mục Tiêu Ứng Dụng
-Ứng dụng **${cleanTitle}** (${gh.fullName}) cung cấp giải pháp chuyển đổi số và quản lý hiệu quả cho người dùng.
-
-## 2. Điểm Nổi Bật & Giải Pháp Đột Phá
-- **Tối ưu hóa kiến trúc:** Xây dựng trên nền tảng hiện đại, tối ưu hóa hiệu năng và độ mượt mà khi tương tác.
-- **Bảo mật đa tầng:** Xác thực Google OAuth kết hợp Row Level Security (RLS) bảo vệ dữ liệu ở cấp độ bản ghi.
-- **Đồng bộ thời gian thực (Realtime Sync):** Tự động cập nhật dữ liệu đa tab và đa thiết bị.
-
-## 3. Kiến Trúc & Công Nghệ (Tech Stack)
-- **Tác Giả (Author):** ${gh.owner || 'Developer'}
-- **Nơi Host (Hosting):** Vercel (${gh.name.toLowerCase()})
-- **Mã Nguồn (GitHub):** https://github.com/${gh.fullName}
-- **Frontend / Framework:** ${hasReact ? 'React / Vite / TypeScript' : gh.languages.join(', ') || 'TypeScript'}
-- **Cơ Sở Dữ Liệu:** ${hasSupabase ? 'Supabase PostgreSQL' : 'Tích hợp lưu trữ'}
-- **Triển khai:** Vercel Monorepo Architecture
-
-## 4. Danh Sách Tính Năng Chi Tiết
-- Giao diện thân thiện chuẩn Responsive trên cả Mobile & Desktop.
-- Quản lý trạng thái, đồng bộ dữ liệu an toàn và hiệu năng cao.
-`;
+    const desc = gh.description || gh.packageJson?.description || `${cleanTitle} application engineered by ${gh.owner || 'Developer'}.`;
 
     const specEn = `# 1. Overview & Objectives
-**${cleanTitle}** (${gh.fullName}) is developed by ${gh.owner || 'Developer'}, providing an integrated workspace solution.
+**${cleanTitle}** (${gh.fullName}) is developed by ${gh.owner || 'Developer'}, providing a modern cloud and web engineering solution.
 
 ## 2. Breakthrough Highlights & Key Solutions
 - **Modern Architecture:** Engineered with high-performance responsive frontend and secure backend pipelines.
@@ -150,6 +129,8 @@ function extractHeuristically(
 - High reliability, instant query caching, and robust security policies.
 `;
 
+    const specVi = specEn;
+
     const backlog = [
       'Configure Realtime Data Sync & RLS policies',
       'Refine UI responsive layout & dark theme styling',
@@ -160,7 +141,7 @@ function extractHeuristically(
       title: cleanTitle,
       frontendUrl: gh.homepageUrl || `https://${gh.name.toLowerCase()}.vercel.app`,
       category,
-      database: hasSupabase ? 'Supabase Database' : 'JH Supabase NoData',
+      database: hasSupabase ? 'Supabase LifeDashboard' : 'Neon PostgreSQL',
       status: 'Development',
       priority: 'Medium',
       author: gh.owner || 'Developer',
@@ -178,30 +159,7 @@ function extractHeuristically(
       .replace(/[-_]+/g, ' ')
       .replace(/\b\w/g, (c) => c.toUpperCase());
 
-    return {
-      title: cleanTitle,
-      frontendUrl: vc.liveUrl,
-      category: 'Web App',
-      database: 'Supabase Database',
-      status: 'Production',
-      priority: 'Medium',
-      author: 'Developer',
-      github: vc.gitRepo?.repo ? `https://github.com/${vc.gitRepo.org || 'Developer'}/${vc.gitRepo.repo}` : '',
-      hosting: `Vercel (${vc.projectName})`,
-      description: vc.extractedDescription || `Ứng dụng web ${cleanTitle} triển khai trên Vercel.`,
-      techNotes: `Vercel Project: ${vc.projectName}\nFramework: ${vc.framework || 'React'}\nLive URL: ${vc.liveUrl}`,
-      specVi: `# 1. Giới Thiệu
-Ứng dụng ${cleanTitle} hoạt động trực tiếp tại ${vc.liveUrl}.
-
-## 2. Điểm Nổi Bật & Giải Pháp Đột Phá
-- Triển khai trên mạng lưới Vercel Edge Network tốc độ cao.
-- Tự động CI/CD và tối ưu hóa tài nguyên tải trang.
-
-## 3. Kiến Trúc
-- **Tác Giả:** developer
-- **Hosting:** Vercel (${vc.projectName})
-- **Công nghệ:** ${vc.framework || 'React / Vite'}`,
-      specEn: `# 1. Overview
+    const specEn = `# 1. Overview
 ${cleanTitle} is deployed on Vercel at ${vc.liveUrl}.
 
 ## 2. Breakthrough Highlights & Key Solutions
@@ -211,7 +169,22 @@ ${cleanTitle} is deployed on Vercel at ${vc.liveUrl}.
 ## 3. Architecture
 - **Author:** developer
 - **Hosting:** Vercel (${vc.projectName})
-- **Tech Stack:** ${vc.framework || 'React / Vite'}`,
+- **Tech Stack:** ${vc.framework || 'React / Vite'}`;
+
+    return {
+      title: cleanTitle,
+      frontendUrl: vc.liveUrl,
+      category: 'Web App',
+      database: 'Neon PostgreSQL',
+      status: 'Production',
+      priority: 'Medium',
+      author: 'Developer',
+      github: vc.gitRepo?.repo ? `https://github.com/${vc.gitRepo.org || 'Developer'}/${vc.gitRepo.repo}` : '',
+      hosting: `Vercel (${vc.projectName})`,
+      description: vc.extractedDescription || `${cleanTitle} web application deployed on Vercel.`,
+      techNotes: `Vercel Project: ${vc.projectName}\nFramework: ${vc.framework || 'React'}\nLive URL: ${vc.liveUrl}`,
+      specVi: specEn,
+      specEn,
       backlog: [
         'Automated Health Check monitoring',
         'Update technical specification & user documentation',
@@ -241,14 +214,14 @@ Your mission is to analyze repository or deployment data and generate accurate, 
 Rules:
 1. Title: Formal title in Title Case (e.g., "Token Wallet", "Family Hub", "BETH Quant Bot").
 2. Category: Select from ('Web App', 'AI Tool', 'Trading Bot', 'Education', 'Healthcare', 'Management', 'Finance', 'Utility').
-3. Database: Select from ('Supabase Database', 'JH Supabase Data 2', 'JH Supabase NoData').
+3. Database: Select from ('Supabase LifeDashboard', 'Supabase FinMatchAI', 'Neon PostgreSQL', 'Local Storage', 'Local SQLite').
 4. Status: Select from ('Production', 'Development', 'Staging', 'Planning').
 5. Priority: Select from ('High', 'Medium', 'Low').
 6. Author: GitHub owner / repository creator (default 'Developer').
 7. Hosting: Hosting platform details (e.g. 'Vercel (project-name)' or 'Desktop Windows App').
 8. Description: Concise summary of the application.
 9. TechNotes: Architecture, stack, port, env variables, tech notes.
-10. SpecVi: Comprehensive SRS Technical Specification in standard Markdown Vietnamese including Introduction, Breakthrough Highlights & Key Features, Architecture & Tech Stack, and Detailed Feature Specifications.
+10. SpecVi: Comprehensive SRS Technical Specification in standard English Markdown including Introduction, Breakthrough Highlights & Key Features, Architecture & Tech Stack, and Detailed Feature Specifications.
 11. SpecEn: Full equivalent SRS Technical Specification in English Markdown with identical depth.
 12. Backlog: 3-6 actionable feature tasks (array of strings).
 
@@ -302,7 +275,7 @@ Return STRICT JSON only without Markdown formatting:
             title: parsed.title || data.name,
             frontendUrl: parsed.frontendUrl || (source === 'vercel' ? (data as VercelProjectPayload).liveUrl : (data as GitHubRepoPayload).homepageUrl || ''),
             category: parsed.category || 'Web App',
-            database: parsed.database || 'Supabase Database',
+            database: parsed.database || 'Neon PostgreSQL',
             status: parsed.status || 'Development',
             priority: parsed.priority || 'Medium',
             author: parsed.author || (source === 'github' ? (data as GitHubRepoPayload).owner : 'Developer') || 'Developer',
@@ -349,7 +322,7 @@ Return STRICT JSON only without Markdown formatting:
             title: parsed.title || data.name,
             frontendUrl: parsed.frontendUrl || (source === 'vercel' ? (data as VercelProjectPayload).liveUrl : (data as GitHubRepoPayload).homepageUrl || ''),
             category: parsed.category || 'Web App',
-            database: parsed.database || 'Supabase Database',
+            database: parsed.database || 'Neon PostgreSQL',
             status: parsed.status || 'Development',
             priority: parsed.priority || 'Medium',
             author: parsed.author || (source === 'github' ? (data as GitHubRepoPayload).owner : 'Developer') || 'Developer',

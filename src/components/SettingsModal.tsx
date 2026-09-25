@@ -45,7 +45,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
 
   return (
     <Modal
-      title="Cài Đặt Hệ Thống"
+      title="System Settings"
       onClose={onClose}
       maxWidth={activeTab === 'users' ? '760px' : activeTab === 'ai' ? '580px' : '480px'}
     >
@@ -56,14 +56,14 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           onClick={() => setActiveTab('general')}
           style={{ fontSize: '0.85rem', padding: '0.4rem 0.9rem' }}
         >
-          ⚙️ Giao Diện
+          ⚙️ Appearance
         </button>
         <button
           className={`btn ${activeTab === 'ai' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveTab('ai')}
           style={{ fontSize: '0.85rem', padding: '0.4rem 0.9rem' }}
         >
-          🤖 Cấu Hình AI & API
+          🤖 AI & API Config
         </button>
         {isAdmin && (
           <button
@@ -71,7 +71,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
             onClick={() => setActiveTab('users')}
             style={{ fontSize: '0.85rem', padding: '0.4rem 0.9rem' }}
           >
-            👥 Quản Lý Người Dùng
+            👥 User Management
           </button>
         )}
       </div>
@@ -81,8 +81,8 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           {/* Dark / Light Mode Toggle */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 0' }}>
             <div>
-              <div style={{ fontWeight: 600 }}>Giao diện (Appearance)</div>
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Chọn chế độ sáng hoặc tối</div>
+              <div style={{ fontWeight: 600 }}>Appearance</div>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Switch between light and dark themes</div>
             </div>
             <button
               className="theme-toggle-btn"
@@ -113,7 +113,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSaveApiKeys}>
           {savedNotice && (
             <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#34d399', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.85rem' }}>
-              ✓ Đã lưu cài đặt API Keys vào trình duyệt thành công!
+              ✓ Settings and API keys saved successfully!
             </div>
           )}
 
@@ -131,12 +131,12 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
               <div>
                 <div style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <GithubIcon size={16} />
-                  <span>Liên Kết GitHub OAuth:</span>
+                  <span>GitHub OAuth Connection:</span>
                 </div>
                 <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
                   {githubToken
-                    ? '🟢 Đã kết nối — Sẵn sàng đọc toàn bộ Private Repositories'
-                    : '⚪ Chưa kết nối — Đăng nhập 1-chạm để tự động truy cập repo'}
+                    ? '🟢 Connected — Ready to access private & public repositories'
+                    : '⚪ Not connected — 1-click sign in to discover repositories'}
                 </div>
               </div>
 
@@ -147,7 +147,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
                   onClick={disconnectGitHub}
                   style={{ fontSize: '0.78rem' }}
                 >
-                  Ngắt kết nối
+                  Disconnect
                 </button>
               ) : (
                 <button
@@ -157,7 +157,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
                   style={{ fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
                 >
                   <GithubIcon size={14} />
-                  <span>Kết Nối GitHub</span>
+                  <span>Connect GitHub</span>
                 </button>
               )}
             </div>
@@ -173,12 +173,12 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
               onChange={(e) => setGeminiKey(e.target.value)}
             />
             <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
-              Dùng để tự động trích xuất cấu trúc dự án và sinh bản đặc tả kỹ thuật SRS.
+              Used to automatically extract project architecture and generate SRS specifications.
             </span>
           </div>
 
           <div className="form-group" style={{ marginTop: '0.85rem' }}>
-            <label>OpenAI API Key (Tùy chọn):</label>
+            <label>OpenAI API Key (Optional):</label>
             <input
               type="password"
               className="input-text"
@@ -189,7 +189,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div className="form-group" style={{ marginTop: '0.85rem' }}>
-            <label>GitHub Personal Access Token (PAT) thủ công (Nếu không dùng OAuth):</label>
+            <label>Manual GitHub Personal Access Token (PAT) (Optional fallback):</label>
             <input
               type="password"
               className="input-text"
@@ -200,7 +200,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div className="form-group" style={{ marginTop: '0.85rem' }}>
-            <label>Vercel Access Token (Tùy chọn):</label>
+            <label>Vercel Access Token (Optional):</label>
             <input
               type="password"
               className="input-text"
@@ -212,10 +212,10 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
 
           <div className="modal-actions" style={{ marginTop: '1.25rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Đóng
+              Close
             </button>
             <button type="submit" className="btn btn-primary">
-              Lưu Cấu Hình
+              Save Settings
             </button>
           </div>
         </form>

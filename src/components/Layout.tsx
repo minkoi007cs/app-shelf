@@ -23,7 +23,7 @@ export default function Layout() {
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
           <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <WalletIcon />
-            <span>App Shelf</span>
+            <span>MinKoi's App Store Workspace</span>
           </h1>
         </div>
         <div className="header-actions">

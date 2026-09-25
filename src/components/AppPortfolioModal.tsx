@@ -106,7 +106,7 @@ function formatInline(text: string): React.ReactNode {
 }
 
 function SpecDocRenderer({ content }: { content: string }) {
-  if (!content) return <div style={{ opacity: 0.6, fontStyle: 'italic', padding: '1rem 0' }}>Chưa có nội dung đặc tả.</div>;
+  if (!content) return <div style={{ opacity: 0.6, fontStyle: 'italic', padding: '1rem 0' }}>No specification content available.</div>;
 
   const lines = content.split('\n');
   const elements: React.ReactNode[] = [];
@@ -259,7 +259,7 @@ export function AppPortfolioModal({
   onBacklogChange,
 }: AppPortfolioModalProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'specs' | 'backlog' | 'settings'>(initialTab);
-  const [specLang, setSpecLang] = useState<'vi' | 'en'>('vi');
+  const [specLang, setSpecLang] = useState<'vi' | 'en'>('en');
   const [isCheckingHealth, setIsCheckingHealth] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [newBacklogTitle, setNewBacklogTitle] = useState('');
@@ -291,9 +291,9 @@ export function AppPortfolioModal({
     if (!app.frontendUrl) return;
     setIsCheckingHealth(true);
 
-    const nowTimeStr = new Date().toLocaleDateString('vi-VN', {
+    const nowTimeStr = new Date().toLocaleDateString('en-US', {
       day: '2-digit',
-      month: '2-digit',
+      month: 'short',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
@@ -324,7 +324,7 @@ export function AppPortfolioModal({
       onUpdateApp(updated);
       setFormData(updated);
     } catch (err) {
-      console.error('Lỗi lưu kết quả health check:', err);
+      console.error('Failed to save health check result:', err);
     } finally {
       setIsCheckingHealth(false);
     }
@@ -335,9 +335,9 @@ export function AppPortfolioModal({
     if (!canEdit) return;
     const nextChecked = !app.manualChecked;
     const nextCheckedAt = nextChecked
-      ? new Date().toLocaleDateString('vi-VN', {
+      ? new Date().toLocaleDateString('en-US', {
           day: '2-digit',
-          month: '2-digit',
+          month: 'short',
           year: 'numeric',
         })
       : '';
@@ -355,7 +355,7 @@ export function AppPortfolioModal({
       onUpdateApp(updated);
       setFormData(updated);
     } catch (err: any) {
-      alert('Lỗi cập nhật xác nhận kiểm tra: ' + (err?.message || ''));
+      alert('Failed to update verification status: ' + (err?.message || ''));
     }
   };
 
@@ -374,7 +374,7 @@ export function AppPortfolioModal({
         .eq('id', item.id);
       onBacklogChange(nextBacklog);
     } catch (err: any) {
-      alert('Lỗi cập nhật task: ' + (err?.message || ''));
+      alert('Failed to update task: ' + (err?.message || ''));
     }
   };
 
@@ -394,7 +394,7 @@ export function AppPortfolioModal({
       onBacklogChange(nextBacklog);
       setNewBacklogTitle('');
     } catch (err: any) {
-      alert('Lỗi thêm task: ' + (err?.message || ''));
+      alert('Failed to add task: ' + (err?.message || ''));
     }
   };
 
@@ -406,7 +406,7 @@ export function AppPortfolioModal({
       await supabase.from('aw_app_backlog_items').delete().eq('id', itemId);
       onBacklogChange(nextBacklog);
     } catch (err: any) {
-      alert('Lỗi xóa task: ' + (err?.message || ''));
+      alert('Failed to delete task: ' + (err?.message || ''));
     }
   };
 
@@ -427,7 +427,7 @@ export function AppPortfolioModal({
         github: formData.github?.trim() || '',
         techStack: formData.techStack || '',
         category: formData.category || 'Web App',
-        database: formData.database || 'JH Supabase NoData',
+        database: formData.database || 'Neon PostgreSQL',
         status: formData.status || 'Development',
         priority: formData.priority || 'Medium',
         frontendUrl: formData.frontendUrl?.trim() || '',
@@ -435,12 +435,10 @@ export function AppPortfolioModal({
         techNotes: formData.techNotes || '',
         specVi: formData.specVi || '',
         specEn: formData.specEn || '',
-        specUpdatedAt: new Date().toLocaleDateString('vi-VN', {
+        specUpdatedAt: new Date().toLocaleDateString('en-US', {
           day: '2-digit',
-          month: '2-digit',
+          month: 'short',
           year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
         }),
       };
 
@@ -450,11 +448,11 @@ export function AppPortfolioModal({
 
       onUpdateApp(updated);
       setFormData(updated);
-      setSaveSuccessMessage('Đã lưu thay đổi thành công!');
+      setSaveSuccessMessage('Changes saved successfully!');
       setTimeout(() => setSaveSuccessMessage(''), 3000);
     } catch (err: any) {
       console.error('Save project error:', err);
-      alert('Lỗi lưu thông tin app: ' + (err?.message || 'Không rõ nguyên nhân'));
+      alert('Failed to save project details: ' + (err?.message || 'Unknown error'));
     } finally {
       setIsSaving(false);
     }
@@ -492,48 +490,39 @@ export function AppPortfolioModal({
               <div className="portfolio-title-row">
                 <h1 className="portfolio-app-title">{app.title}</h1>
                 <span className="portfolio-status-pill">{app.status}</span>
-                {app.priority && (
-                  <span className={`portfolio-priority-pill ${app.priority.toLowerCase()}`}>
-                    {app.priority}
+                {app.manualChecked && (
+                  <span className="portfolio-verified-badge" title={`Verified at: ${app.manualCheckedAt || 'N/A'}`}>
+                    ✓ Verified
                   </span>
                 )}
               </div>
 
-              <div className="portfolio-meta-tags">
-                <span className="portfolio-category-badge">🏷️ {app.category || 'Web App'}</span>
-                <span className="portfolio-category-badge" style={{ background: 'rgba(99, 102, 241, 0.15)', color: '#a5b4fc', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
-                  👤 {app.author || 'Developer'}
-                </span>
+              <div className="portfolio-meta-subline">
+                <span className="portfolio-subline-cat">{app.category || 'Web App'}</span>
+                <span className="portfolio-subline-dot">•</span>
+                <span className="portfolio-subline-author">by {app.author || 'minkoi007cs'}</span>
                 {app.hosting && (
-                  <span className="portfolio-category-badge" style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
-                    ☁️ {app.hosting}
-                  </span>
+                  <>
+                    <span className="portfolio-subline-dot">•</span>
+                    <span className="portfolio-subline-host">{app.hosting}</span>
+                  </>
                 )}
-                {app.database && (
-                  <span className="portfolio-db-badge">
-                    🗄️ {app.database}
-                  </span>
-                )}
+                <span className="portfolio-subline-dot">•</span>
                 <div
                   className="portfolio-health-tag"
-                  title={app.healthCheckedAt ? `Checked lúc: ${app.healthCheckedAt}` : 'Chưa check'}
+                  title={app.healthCheckedAt ? `Checked at: ${app.healthCheckedAt}` : 'Not checked'}
                 >
                   <span className={`store-health-dot ${app.healthStatus || 'unknown'}`} />
                   <span>
                     {app.healthStatus === 'healthy'
-                      ? 'Healthy'
+                      ? 'Online'
                       : app.healthStatus === 'failed'
                       ? 'Down'
                       : app.healthStatus === 'checking'
                       ? 'Checking...'
-                      : 'Chưa check'}
+                      : 'Unchecked'}
                   </span>
                 </div>
-                {app.manualChecked && (
-                  <span className="portfolio-verified-badge" title={`Check tay lúc: ${app.manualCheckedAt || 'N/A'}`}>
-                    ✓ Đã xác minh {app.manualCheckedAt ? `(${app.manualCheckedAt})` : ''}
-                  </span>
-                )}
               </div>
             </div>
           </div>
@@ -546,8 +535,8 @@ export function AppPortfolioModal({
                 rel="noreferrer"
                 className="btn btn-primary portfolio-btn-launch"
               >
-                <span>Mở Trực Tiếp</span>
-                <ExternalLinkIcon size={16} />
+                <span>Launch App</span>
+                <ExternalLinkIcon size={14} />
               </a>
             )}
 
@@ -555,19 +544,19 @@ export function AppPortfolioModal({
               className="btn btn-secondary portfolio-btn-health"
               onClick={handleCheckHealth}
               disabled={isCheckingHealth || !app.frontendUrl}
-              title="Kiểm tra trạng thái online của ứng dụng"
+              title="Check online status of this application"
             >
-              <RefreshIcon size={14} className={isCheckingHealth ? 'spin-icon' : ''} />
-              <span>{isCheckingHealth ? 'Đang check...' : 'Check Health'}</span>
+              <RefreshIcon size={13} className={isCheckingHealth ? 'spin-icon' : ''} />
+              <span>{isCheckingHealth ? 'Checking...' : 'Check Health'}</span>
             </button>
 
             {canEdit && (
               <button
                 className={`btn ${app.manualChecked ? 'btn-secondary' : 'btn-secondary'} portfolio-btn-verify`}
                 onClick={handleToggleManualCheck}
-                title="Xác nhận bạn đã kiểm tra ứng dụng"
+                title="Confirm manual verification"
               >
-                <span>{app.manualChecked ? '✓ Đã Check Tay' : '○ Xác Nhận Check'}</span>
+                <span>{app.manualChecked ? '✓ Verified' : '○ Verify'}</span>
               </button>
             )}
 
@@ -575,14 +564,14 @@ export function AppPortfolioModal({
               type="button"
               className="btn btn-secondary portfolio-btn-share"
               onClick={() => setIsShareModalOpen(true)}
-              title="Chia sẻ ứng dụng này cho bạn bè, đồng nghiệp hoặc thầy cô"
+              title="Share this application with friends, colleagues, or instructors"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
             >
-              <ShareIcon size={15} />
-              <span>Chia Sẻ</span>
+              <ShareIcon size={14} />
+              <span>Share</span>
             </button>
 
-            <button className="portfolio-close-btn" onClick={onClose} title="Đóng modal (Esc)">
+            <button className="portfolio-close-btn" onClick={onClose} title="Close modal (Esc)">
               ✕
             </button>
           </div>
@@ -596,21 +585,21 @@ export function AppPortfolioModal({
               onClick={() => setActiveTab('overview')}
             >
               <span>🌟</span>
-              <span>Tổng Quan Portfolio</span>
+              <span>Overview</span>
             </button>
             <button
               className={`portfolio-tab-btn ${activeTab === 'specs' ? 'active' : ''}`}
               onClick={() => setActiveTab('specs')}
             >
               <span>📋</span>
-              <span>Đặc Tả Kỹ Thuật (Specs)</span>
+              <span>System Specs (SRS)</span>
             </button>
             <button
               className={`portfolio-tab-btn ${activeTab === 'backlog' ? 'active' : ''}`}
               onClick={() => setActiveTab('backlog')}
             >
               <span>🚀</span>
-              <span>Lộ Trình & Backlog</span>
+              <span>Roadmap & Backlog</span>
               {backlog.length > 0 && (
                 <span className="portfolio-tab-badge">
                   {completedCount}/{backlog.length}
@@ -623,14 +612,14 @@ export function AppPortfolioModal({
                 onClick={() => setActiveTab('settings')}
               >
                 <span>⚙️</span>
-                <span>Cấu Hình & Quản Lý (Edit)</span>
+                <span>Settings & Edit</span>
               </button>
             )}
           </div>
 
           <div className="portfolio-quick-stats">
             <span className="portfolio-stat-text">
-              Quyền hạn: <strong>{canEdit ? 'Admin / Toàn quyền' : 'Viewer / Chỉ xem'}</strong>
+              Role: <strong>{canEdit ? 'Admin / Full Access' : 'Viewer / Read-only'}</strong>
             </span>
           </div>
         </div>
@@ -640,152 +629,162 @@ export function AppPortfolioModal({
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="portfolio-tab-content">
-              <div className="portfolio-grid-layout">
-                {/* Unified Hero Overview Card (Description + System Info + Launch Action) */}
-                <div className="portfolio-overview-hero-card">
-                  <div className="portfolio-overview-split">
-                    {/* Left: Description & Quick Links */}
-                    <div className="portfolio-desc-block">
-                      <h3 className="portfolio-card-title">
-                        <span>📖</span> Mô Tả & Giới Thiệu
+              <div className="portfolio-overview-clean-grid">
+                {/* Main Column: Clean flowing sections (1 frame, no nested boxes) */}
+                <div className="portfolio-overview-main-col">
+                  {/* About Section */}
+                  <div className="portfolio-clean-section">
+                    <h3 className="portfolio-clean-heading">
+                      <span>📖</span> About Application
+                    </h3>
+                    <p className="portfolio-clean-desc">
+                      {app.description || 'No detailed description available for this application.'}
+                    </p>
+                  </div>
+
+                  {/* Architecture & Tech Notes */}
+                  {app.techNotes && (
+                    <div className="portfolio-clean-section">
+                      <h3 className="portfolio-clean-heading">
+                        <span>💡</span> Architecture &amp; Tech Notes
                       </h3>
-                      <p className="portfolio-desc-text">
-                        {app.description || 'Chưa có mô tả chi tiết cho ứng dụng này.'}
-                      </p>
-
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginTop: '0.5rem' }}>
-                        {app.frontendUrl && (
-                          <a
-                            href={app.frontendUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="btn btn-primary"
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
-                          >
-                            <span>Truy cập Web App</span>
-                            <ExternalLinkIcon size={14} />
-                          </a>
-                        )}
-
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          onClick={() => setActiveTab('specs')}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
-                        >
-                          <span>📋 Xem Đặc Tả SRS</span>
-                        </button>
+                      <div className="portfolio-clean-tech-notes">
+                        <SpecDocRenderer content={app.techNotes} />
                       </div>
                     </div>
+                  )}
 
-                    {/* Right: Clean Meta Information Grid */}
-                    <div className="portfolio-meta-grid">
-                      <div className="portfolio-meta-item">
-                        <span className="meta-label">Tác giả</span>
-                        <span className="meta-value">{app.author || 'Developer'}</span>
+                  {/* Implementation Progress & Milestones */}
+                  {backlog.length > 0 && (
+                    <div className="portfolio-clean-section">
+                      <div className="portfolio-clean-section-header">
+                        <h3 className="portfolio-clean-heading">
+                          <span>🚀</span> Roadmap &amp; Progress
+                        </h3>
+                        <button
+                          type="button"
+                          className="portfolio-text-link"
+                          onClick={() => setActiveTab('backlog')}
+                        >
+                          View Backlog ({completedCount}/{backlog.length}) &rarr;
+                        </button>
                       </div>
 
-                      <div className="portfolio-meta-item">
-                        <span className="meta-label">Hosting</span>
-                        <span className="meta-value">{app.hosting || 'Vercel'}</span>
+                      <div className="portfolio-progress-bar-wrapper">
+                        <div className="portfolio-progress-bar-track">
+                          <div
+                            className="portfolio-progress-bar-fill"
+                            style={{ width: `${progressPercent}%` }}
+                          />
+                        </div>
+                        <span className="portfolio-progress-text">{progressPercent}% Completed</span>
                       </div>
 
-                      <div className="portfolio-meta-item">
-                        <span className="meta-label">Danh mục</span>
-                        <span className="meta-value">{app.category || 'Web App'}</span>
+                      <div className="portfolio-backlog-preview-list">
+                        {backlog.slice(0, 4).map((item) => (
+                          <div
+                            key={item.id}
+                            className={`portfolio-backlog-preview-item ${item.isCompleted ? 'completed' : ''}`}
+                            onClick={() => canEdit && handleToggleBacklog(item)}
+                            style={{ cursor: canEdit ? 'pointer' : 'default' }}
+                          >
+                            <span className="backlog-preview-check">
+                              {item.isCompleted ? '✓' : '○'}
+                            </span>
+                            <span className="backlog-preview-title">{item.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right Sidebar: Clean Key-Value metadata without heavy nested card */}
+                <div className="portfolio-overview-sidebar-col">
+                  <div className="portfolio-sidebar-box">
+                    <h4 className="portfolio-sidebar-title">Information</h4>
+
+                    <div className="portfolio-sidebar-list">
+                      <div className="portfolio-sidebar-item">
+                        <span className="sidebar-label">Developer</span>
+                        <span className="sidebar-value">{app.author || 'minkoi007cs'}</span>
                       </div>
 
-                      <div className="portfolio-meta-item">
-                        <span className="meta-label">Database</span>
-                        <span className="meta-value" style={{ color: '#38bdf8' }}>{app.database || 'Supabase'}</span>
+                      <div className="portfolio-sidebar-item">
+                        <span className="sidebar-label">Category</span>
+                        <span className="sidebar-value">{app.category || 'Web App'}</span>
                       </div>
 
-                      <div className="portfolio-meta-item">
-                        <span className="meta-label">Trạng thái</span>
-                        <span className="meta-value">
+                      <div className="portfolio-sidebar-item">
+                        <span className="sidebar-label">Hosting</span>
+                        <span className="sidebar-value">{app.hosting || 'Vercel'}</span>
+                      </div>
+
+                      <div className="portfolio-sidebar-item">
+                        <span className="sidebar-label">Database</span>
+                        <span className="sidebar-value highlight-db">{app.database || 'None'}</span>
+                      </div>
+
+                      <div className="portfolio-sidebar-item">
+                        <span className="sidebar-label">Status</span>
+                        <span className="sidebar-value">
                           <span className="portfolio-status-pill">{app.status}</span>
                         </span>
                       </div>
 
-                      <div className="portfolio-meta-item">
-                        <span className="meta-label">Ưu tiên</span>
-                        <span className="meta-value">{app.priority || 'Medium'}</span>
-                      </div>
+                      {app.priority && (
+                        <div className="portfolio-sidebar-item">
+                          <span className="sidebar-label">Priority</span>
+                          <span className="sidebar-value">
+                            <span className={`portfolio-priority-pill ${app.priority.toLowerCase()}`}>
+                              {app.priority}
+                            </span>
+                          </span>
+                        </div>
+                      )}
 
                       {app.github && (
-                        <div className="portfolio-meta-item" style={{ gridColumn: 'span 2' }}>
-                          <span className="meta-label">GitHub Repo</span>
-                          <span className="meta-value">
+                        <div className="portfolio-sidebar-item">
+                          <span className="sidebar-label">Repository</span>
+                          <span className="sidebar-value">
                             <a
                               href={app.github}
                               target="_blank"
                               rel="noreferrer"
-                              style={{ color: '#60a5fa', textDecoration: 'underline', fontSize: '0.82rem' }}
+                              className="portfolio-repo-link"
                             >
                               {app.github.replace('https://github.com/', '')} ↗
                             </a>
                           </span>
                         </div>
                       )}
-                    </div>
-                  </div>
-                </div>
 
-                {/* Architecture & Tech Notes */}
-                {app.techNotes && (
-                  <div className="portfolio-card">
-                    <h3 className="portfolio-card-title">
-                      <span>💡</span> Kiến Trúc & Ghi Chú Kỹ Thuật
-                    </h3>
-                    <div className="portfolio-tech-notes">
-                      <SpecDocRenderer content={app.techNotes} />
-                    </div>
-                  </div>
-                )}
-
-                {/* Progress & Backlog Section */}
-                <div className="portfolio-card">
-                  <div className="portfolio-card-header-row">
-                    <h3 className="portfolio-card-title">
-                      <span>🚀</span> Tiến Độ Thực Hiện & Backlog ({backlog.length} task)
-                    </h3>
-                    <button
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => setActiveTab('backlog')}
-                    >
-                      Mở quản lý backlog ({backlog.length})
-                    </button>
-                  </div>
-
-                  <div className="portfolio-progress-bar-wrapper">
-                    <div className="portfolio-progress-bar-track">
-                      <div
-                        className="portfolio-progress-bar-fill"
-                        style={{ width: `${progressPercent}%` }}
-                      />
-                    </div>
-                    <span className="portfolio-progress-text">{progressPercent}% Hoàn thành</span>
-                  </div>
-
-                  {backlog.length === 0 ? (
-                    <p className="portfolio-empty-text" style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: '#94a3b8' }}>
-                      Chưa có đầu việc backlog nào được thêm.
-                    </p>
-                  ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.5rem', marginTop: '1rem' }}>
-                      {backlog.slice(0, 6).map((item) => (
-                        <div
-                          key={item.id}
-                          className={`portfolio-backlog-preview-item ${item.isCompleted ? 'completed' : ''}`}
-                        >
-                          <span className="backlog-preview-check">
-                            {item.isCompleted ? '✓' : '○'}
+                      {app.frontendUrl && (
+                        <div className="portfolio-sidebar-item">
+                          <span className="sidebar-label">Live URL</span>
+                          <span className="sidebar-value">
+                            <a
+                              href={app.frontendUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="portfolio-repo-link"
+                            >
+                              {app.frontendUrl.replace(/^https?:\/\//, '')} ↗
+                            </a>
                           </span>
-                          <span className="backlog-preview-title">{item.title}</span>
                         </div>
-                      ))}
+                      )}
+
+                      {app.specUpdatedAt && (
+                        <div className="portfolio-sidebar-item">
+                          <span className="sidebar-label">Last Updated</span>
+                          <span className="sidebar-value" style={{ color: '#94a3b8' }}>
+                            {app.specUpdatedAt}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -798,32 +797,32 @@ export function AppPortfolioModal({
                 <div className="portfolio-spec-lang-btns">
                   <button
                     type="button"
-                    className={`btn ${specLang === 'vi' ? 'btn-primary' : 'btn-secondary'}`}
-                    onClick={() => setSpecLang('vi')}
-                  >
-                    🇻🇳 Đặc Tả Tiếng Việt
-                  </button>
-                  <button
-                    type="button"
                     className={`btn ${specLang === 'en' ? 'btn-primary' : 'btn-secondary'}`}
                     onClick={() => setSpecLang('en')}
                   >
                     🇬🇧 English Specification
                   </button>
+                  <button
+                    type="button"
+                    className={`btn ${specLang === 'vi' ? 'btn-primary' : 'btn-secondary'}`}
+                    onClick={() => setSpecLang('vi')}
+                  >
+                    🇻🇳 Vietnamese SRS
+                  </button>
                 </div>
 
                 <div className="portfolio-spec-meta">
                   <span className="portfolio-spec-date">
-                    📅 Cập nhật lần cuối: {app.specUpdatedAt || '23/09/2026'}
+                    📅 Last updated: {app.specUpdatedAt || 'Recently'}
                   </span>
                   {canEdit && (
                     <button
                       className="btn btn-secondary btn-sm"
                       onClick={() => setActiveTab('settings')}
-                      title="Chỉnh sửa văn bản đặc tả trong phần cài đặt"
+                      title="Edit specification in Settings tab"
                     >
                       <EditIcon size={14} />
-                      <span>Sửa Đặc Tả</span>
+                      <span>Edit Spec</span>
                     </button>
                   )}
                 </div>
@@ -834,7 +833,7 @@ export function AppPortfolioModal({
                   content={
                     specLang === 'en'
                       ? (app.specEn || 'No English specification available for this project.')
-                      : (app.specVi || 'Chưa có đặc tả tiếng Việt cho dự án này.')
+                      : (app.specVi || 'No Vietnamese specification available for this project.')
                   }
                 />
               </div>
@@ -848,17 +847,17 @@ export function AppPortfolioModal({
                 <div className="portfolio-card-header-row">
                   <div>
                     <h3 className="portfolio-card-title">
-                      <span>🚀</span> Danh Sách Nhiệm Vụ & Kế Hoạch (Backlog)
+                      <span>🚀</span> Tasks & Implementation Backlog
                     </h3>
                     <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.2rem' }}>
                       {canEdit
-                        ? 'Admin có thể tick hoàn thành, thêm nhiệm vụ mới hoặc xóa task.'
-                        : 'Xem tiến độ thực hiện các tính năng của dự án.'}
+                        ? 'Admins can mark items completed, add new tasks, or remove items.'
+                        : 'View implementation progress of system features.'}
                     </p>
                   </div>
 
                   <div className="portfolio-progress-chip">
-                    <strong>{completedCount}</strong> / {backlog.length} task xong ({progressPercent}%)
+                    <strong>{completedCount}</strong> / {backlog.length} tasks completed ({progressPercent}%)
                   </div>
                 </div>
 
@@ -878,14 +877,14 @@ export function AppPortfolioModal({
                     <input
                       type="text"
                       className="input-text"
-                      placeholder="Nhập tên nhiệm vụ / tính năng cần làm..."
+                      placeholder="Enter new feature or backlog task..."
                       value={newBacklogTitle}
                       onChange={(e) => setNewBacklogTitle(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleAddBacklog()}
                     />
                     <button className="btn btn-primary" onClick={handleAddBacklog}>
                       <PlusIcon size={16} />
-                      <span>Thêm Task</span>
+                      <span>Add Task</span>
                     </button>
                   </div>
                 )}
@@ -894,7 +893,7 @@ export function AppPortfolioModal({
                 {backlog.length === 0 ? (
                   <div className="portfolio-empty-state">
                     <span>📝</span>
-                    <p>Dự án này hiện chưa có nhiệm vụ backlog nào.</p>
+                    <p>No backlog tasks currently defined for this project.</p>
                   </div>
                 ) : (
                   <div className="portfolio-backlog-full-list">
@@ -924,7 +923,7 @@ export function AppPortfolioModal({
                               e.stopPropagation();
                               handleDeleteBacklog(item.id);
                             }}
-                            title="Xóa nhiệm vụ"
+                            title="Delete task"
                           >
                             <TrashIcon size={14} />
                           </button>
@@ -943,7 +942,7 @@ export function AppPortfolioModal({
               <form onSubmit={handleSaveForm}>
                 <div className="portfolio-card">
                   <h3 className="portfolio-card-title">
-                    <span>⚙️</span> Cấu Hình & Quản Lý Toàn Diện Ứng Dụng
+                    <span>⚙️</span> Comprehensive Application Management
                   </h3>
 
                   {saveSuccessMessage && (
@@ -952,13 +951,13 @@ export function AppPortfolioModal({
                     </div>
                   )}
 
-                  {/* Section 1: Thông tin cơ bản */}
+                  {/* Section 1: Basic Information */}
                   <div className="form-section-title">
-                    <span>🏷️</span> 1. Thông Tin Nhận Diện
+                    <span>🏷️</span> 1. Identity Information
                   </div>
                   <div className="form-grid-3">
                     <div className="form-group">
-                      <label>Tên ứng dụng:</label>
+                      <label>Application Name:</label>
                       <input
                         type="text"
                         className="input-text"
@@ -969,18 +968,18 @@ export function AppPortfolioModal({
                     </div>
 
                     <div className="form-group">
-                      <label>Tác giả / Developer:</label>
+                      <label>Author / Developer:</label>
                       <input
                         type="text"
                         className="input-text"
                         value={formData.author || ''}
                         onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                        placeholder="VD: minh.khoi"
+                        placeholder="e.g. minkoi007cs"
                       />
                     </div>
 
                     <div className="form-group">
-                      <label>Danh mục (Category):</label>
+                      <label>Category:</label>
                       <input
                         type="text"
                         className="input-text"
@@ -990,19 +989,19 @@ export function AppPortfolioModal({
                     </div>
                   </div>
 
-                  {/* Section 2: Hạ tầng & Kết nối */}
+                  {/* Section 2: Infrastructure & Environment */}
                   <div className="form-section-title">
-                    <span>🌐</span> 2. Hạ Tầng & Kết Nối Môi Trường
+                    <span>🌐</span> 2. Infrastructure & Environment
                   </div>
                   <div className="form-grid-3">
                     <div className="form-group">
-                      <label>URL Frontend Web App:</label>
+                      <label>Frontend Web App URL:</label>
                       <input
                         type="url"
                         className="input-text"
                         value={formData.frontendUrl || ''}
                         onChange={(e) => setFormData({ ...formData, frontendUrl: e.target.value })}
-                        placeholder="https://example.com"
+                        placeholder="https://example.minkoi.org"
                       />
                     </div>
 
@@ -1013,7 +1012,7 @@ export function AppPortfolioModal({
                         className="input-text"
                         value={formData.hosting || ''}
                         onChange={(e) => setFormData({ ...formData, hosting: e.target.value })}
-                        placeholder="VD: Vercel (app-shelf)"
+                        placeholder="e.g. Vercel (app-shelf)"
                       />
                     </div>
 
@@ -1029,26 +1028,30 @@ export function AppPortfolioModal({
                     </div>
                   </div>
 
-                  {/* Section 3: Cấu hình hệ thống */}
+                  {/* Section 3: Database & Status */}
                   <div className="form-section-title">
-                    <span>🗄️</span> 3. Trạng Thái & Cơ Sở Dữ Liệu
+                    <span>🗄️</span> 3. Database & System Status
                   </div>
                   <div className="form-grid-3">
                     <div className="form-group">
-                      <label>Database Supabase:</label>
+                      <label>Database Layer:</label>
                       <select
                         className="input-select"
-                        value={formData.database || 'JH Supabase NoData'}
+                        value={formData.database || 'Neon PostgreSQL'}
                         onChange={(e) => setFormData({ ...formData, database: e.target.value })}
                       >
-                        <option value="JH Supabase Data 1">JH Supabase Data 1</option>
-                        <option value="JH Supabase Data 2">JH Supabase Data 2</option>
-                        <option value="JH Supabase NoData">JH Supabase NoData</option>
+                        <option value="Supabase LifeDashboard">Supabase LifeDashboard</option>
+                        <option value="Supabase FinMatchAI">Supabase FinMatchAI</option>
+                        <option value="Neon PostgreSQL">Neon PostgreSQL</option>
+                        <option value="Neon Database">Neon Database</option>
+                        <option value="Browser State & Local Storage">Browser State & Local Storage</option>
+                        <option value="Local Storage">Local Storage</option>
+                        <option value="Local SQLite">Local SQLite</option>
                       </select>
                     </div>
 
                     <div className="form-group">
-                      <label>Trạng thái (Status):</label>
+                      <label>Status:</label>
                       <select
                         className="input-select"
                         value={formData.status || 'Development'}
@@ -1062,7 +1065,7 @@ export function AppPortfolioModal({
                     </div>
 
                     <div className="form-group">
-                      <label>Mức độ ưu tiên:</label>
+                      <label>Priority:</label>
                       <select
                         className="input-select"
                         value={formData.priority || 'Medium'}
@@ -1075,58 +1078,58 @@ export function AppPortfolioModal({
                     </div>
                   </div>
 
-                  {/* Section 4: Mô tả & Tech notes */}
+                  {/* Section 4: Description & Tech Notes */}
                   <div className="form-section-title">
-                    <span>💡</span> 4. Mô Tả & Ghi Chú Kỹ Thuật
+                    <span>💡</span> 4. Description & Tech Notes
                   </div>
                   <div className="form-grid-2">
                     <div className="form-group">
-                      <label>Mô tả tóm tắt ứng dụng:</label>
+                      <label>Summary Description:</label>
                       <textarea
                         className="input-text"
                         rows={4}
                         value={formData.description || ''}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        placeholder="Mô tả mục đích, người dùng mục tiêu, tính năng chính..."
+                        placeholder="Describe goals, target users, and key features..."
                       />
                     </div>
 
                     <div className="form-group">
-                      <label>Ghi chú kỹ thuật & Kiến trúc (Tech Notes):</label>
+                      <label>Technical Architecture & Notes:</label>
                       <textarea
                         className="input-text"
                         rows={4}
                         value={formData.techNotes || ''}
                         onChange={(e) => setFormData({ ...formData, techNotes: e.target.value })}
-                        placeholder="Ghi chú về stack, port, env, auth..."
+                        placeholder="Notes on stack, port, env, auth..."
                       />
                     </div>
                   </div>
 
-                  {/* Section 5: Đặc tả SRS Markdown */}
+                  {/* Section 5: SRS Markdown */}
                   <div className="form-section-title">
-                    <span>📝</span> 5. Tài Liệu Đặc Tả Kỹ Thuật (SRS Markdown)
+                    <span>📝</span> 5. SRS Technical Specifications (Markdown)
                   </div>
                   <div className="form-grid-2">
                     <div className="form-group">
-                      <label>Đặc tả Tiếng Việt (Markdown):</label>
-                      <textarea
-                        className="input-text"
-                        rows={8}
-                        value={formData.specVi || ''}
-                        onChange={(e) => setFormData({ ...formData, specVi: e.target.value })}
-                        placeholder="# 1. Giới thiệu tổng quan..."
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Đặc tả English (Markdown):</label>
+                      <label>English Specification (Markdown):</label>
                       <textarea
                         className="input-text"
                         rows={8}
                         value={formData.specEn || ''}
                         onChange={(e) => setFormData({ ...formData, specEn: e.target.value })}
                         placeholder="# 1. Overview and Architecture..."
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Vietnamese Specification (Markdown - Optional):</label>
+                      <textarea
+                        className="input-text"
+                        rows={8}
+                        value={formData.specVi || ''}
+                        onChange={(e) => setFormData({ ...formData, specVi: e.target.value })}
+                        placeholder="# 1. Overview & Architecture..."
                       />
                     </div>
                   </div>
@@ -1146,21 +1149,21 @@ export function AppPortfolioModal({
                       type="button"
                       className="btn btn-danger"
                       onClick={() => {
-                        if (window.confirm(`Bạn có chắc muốn xóa vĩnh viễn ứng dụng "${app.title}"?`)) {
+                        if (window.confirm(`Are you sure you want to permanently delete "${app.title}"?`)) {
                           onDeleteApp(app.id);
                         }
                       }}
                     >
                       <TrashIcon size={16} />
-                      <span>Xóa Vĩnh Viễn Ứng Dụng</span>
+                      <span>Permanently Delete Application</span>
                     </button>
 
                     <div style={{ display: 'flex', gap: '0.75rem' }}>
                       <button type="button" className="btn btn-secondary" onClick={onClose}>
-                        Đóng
+                        Close
                       </button>
                       <button type="submit" className="btn btn-primary" disabled={isSaving}>
-                        {isSaving ? 'Đang lưu...' : 'Lưu Tất Cả Thay Đổi'}
+                        {isSaving ? 'Saving...' : 'Save All Changes'}
                       </button>
                     </div>
                   </div>
