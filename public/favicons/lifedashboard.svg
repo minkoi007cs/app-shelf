@@ -1,41 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
-  <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff007f" />
-      <stop offset="50%" stop-color="#7928ca" />
-      <stop offset="100%" stop-color="#00dfd8" />
-    </linearGradient>
-    
-    <!-- Text Glow Filter -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-  </defs>
-
-  <!-- Base Rounded Rectangle with Shadow -->
-  <rect x="24" y="24" width="464" height="464" rx="128" fill="url(#bgGrad)" />
-  
-  <!-- Outer subtle circular glassmorphism ring -->
-  <rect x="40" y="40" width="432" height="432" rx="112" fill="none" stroke="#ffffff" stroke-width="8" stroke-opacity="0.15" />
-
-  <!-- Styled "LD" Logo Text -->
-  <text x="50%" y="54%" 
-        font-family="system-ui, -apple-system, sans-serif" 
-        font-weight="900" 
-        font-size="190" 
-        fill="#ffffff" 
-        text-anchor="middle" 
-        dominant-baseline="middle" 
-        filter="url(#glow)"
-        letter-spacing="-10">
-    LD
-  </text>
-  
-  <!-- Accent Sparkle or Dot -->
-  <circle cx="360" cy="180" r="16" fill="#ffffff" filter="url(#glow)" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="12" fill="#064e3b"/>
+  <path d="M12 24L18 20L23 27L29 17L36 24" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="29" cy="17" r="2.5" fill="#a7f3d0"/>
 </svg>

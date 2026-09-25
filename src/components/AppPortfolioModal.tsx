@@ -65,7 +65,6 @@ function getFaviconCandidates(url?: string, id?: string): string[] {
       if (parsed.hostname !== 'localhost' && parsed.hostname !== '127.0.0.1' && parsed.hostname.includes('.')) {
         candidates.push(`${parsed.origin}/favicon.svg`);
         candidates.push(`${parsed.origin}/favicon.ico`);
-        candidates.push(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(parsed.hostname)}&sz=128`);
       }
     } catch {
       // ignore
@@ -468,9 +467,6 @@ export function AppPortfolioModal({
                     width: '100%',
                     height: '100%',
                     objectFit: 'contain',
-                    padding: '8px',
-                    background: 'rgba(15, 23, 42, 0.75)',
-                    backdropFilter: 'blur(4px)',
                     borderRadius: '16px',
                   }}
                 />
