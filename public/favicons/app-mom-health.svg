@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="healthBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c0519"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#healthBg)" stroke="#fb7185" stroke-width="2"/>
+  <!-- Caring Heart Base -->
+  <path d="M32 50 L18 36 C13 31 13 22 20 17 C26 12 30 16 32 19 C34 16 38 12 44 17 C51 22 51 31 46 36 Z" fill="#f43f5e"/>
+  <!-- White ECG Pulse Heartbeat Line -->
+  <path d="M16 33 L24 33 L27 26 L30 40 L34 23 L37 36 L40 33 L48 33" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Medical Care Cross -->
+  <rect x="30" y="11" width="4" height="10" rx="1" fill="#ffffff" opacity="0.9"/>
+  <rect x="27" y="14" width="10" height="4" rx="1" fill="#ffffff" opacity="0.9"/>
+</svg>

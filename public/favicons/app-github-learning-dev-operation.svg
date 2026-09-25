@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="lndBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#lndBg)" stroke="#818cf8" stroke-width="2"/>
+  <!-- Open Book of Knowledge -->
+  <path d="M32 30 C37 26 44 26 50 28 L50 48 C44 46 37 46 32 50 C27 46 20 46 14 48 L14 28 C20 26 27 26 32 30 Z" fill="#ffffff" opacity="0.95"/>
+  <path d="M32 32 L32 50" stroke="#312e81" stroke-width="2"/>
+  <path d="M19 33 C23 32 27 32 30 35" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M34 35 C37 32 41 32 45 33" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Graduation Growth Starburst / Spark -->
+  <polygon points="32,12 34.5,18 41,19 36,23 37.5,29 32,25.5 26.5,29 28,23 23,19 29.5,18" fill="#fbbf24"/>
+</svg>

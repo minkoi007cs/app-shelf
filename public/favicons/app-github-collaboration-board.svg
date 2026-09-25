@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="collabBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#collabBg)" stroke="#38bdf8" stroke-width="2"/>
+  <!-- Overlapping Sticky Notes -->
+  <!-- Cyan bottom note -->
+  <rect x="13" y="16" width="22" height="22" rx="3" fill="#06b6d4" transform="rotate(-7 24 27)" opacity="0.9"/>
+  <!-- Amber main note -->
+  <rect x="29" y="24" width="22" height="22" rx="3" fill="#fbbf24" transform="rotate(8 40 35)"/>
+  <!-- Sticky note content mockup lines -->
+  <line x1="33" y1="29" x2="45" y2="31" stroke="#78350f" stroke-width="2" stroke-linecap="round"/>
+  <line x1="32" y1="35" x2="43" y2="37" stroke="#78350f" stroke-width="2" stroke-linecap="round"/>
+  <!-- Collaboration Connection Node Pin -->
+  <circle cx="28" cy="27" r="4.5" fill="#f43f5e"/>
+  <circle cx="28" cy="27" r="2" fill="#ffffff"/>
+</svg>

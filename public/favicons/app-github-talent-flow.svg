@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="talentBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e1065"/>
+      <stop offset="100%" stop-color="#581c87"/>
+    </linearGradient>
+    <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#talentBg)" stroke="#c084fc" stroke-width="2"/>
+  <!-- ATS Recruitment Loupe / Lens Ring -->
+  <circle cx="28" cy="28" r="14" fill="none" stroke="#ec4899" stroke-width="3"/>
+  <line x1="38" y1="38" x2="49" y2="49" stroke="#ec4899" stroke-width="4" stroke-linecap="round"/>
+  <!-- Luminous Talent Star inside Lens -->
+  <polygon points="28,17 31,23.5 38,24.5 33,29.5 34.5,36.5 28,33 21.5,36.5 23,29.5 18,24.5 25,23.5" fill="url(#starGrad)"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0c29"/>
+      <stop offset="100%" stop-color="#24243e"/>
+    </linearGradient>
+    <linearGradient id="border" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="token" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bg)" stroke="url(#border)" stroke-width="2.5"/>
+  <!-- Wallet Flap & Card Fold -->
+  <path d="M14 22 C14 18 18 16 22 16 L42 16 C46 16 50 18 50 22 L50 42 C50 46 46 48 42 48 L22 48 C18 48 14 46 14 42 Z" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+  <!-- Stylized Geometric 'W' Coin -->
+  <path d="M20 25 L25 39 L32 29 L39 39 L44 25" fill="none" stroke="url(#token)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Glowing Center Gem -->
+  <circle cx="32" cy="25" r="3.5" fill="#38bdf8"/>
+  <circle cx="32" cy="25" r="5.5" fill="none" stroke="#a855f7" stroke-width="1.2" opacity="0.8"/>
+</svg>

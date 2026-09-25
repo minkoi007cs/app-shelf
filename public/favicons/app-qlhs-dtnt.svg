@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="dtntBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#022c22"/>
+      <stop offset="100%" stop-color="#065f46"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#dtntBg)" stroke="#34d399" stroke-width="2"/>
+  <!-- Dong Son Bronze Drum Starburst Sun -->
+  <circle cx="32" cy="27" r="13" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <circle cx="32" cy="27" r="4" fill="#fbbf24"/>
+  <!-- 8 Sun Rays -->
+  <line x1="32" y1="16" x2="32" y2="38" stroke="#f59e0b" stroke-width="2"/>
+  <line x1="21" y1="27" x2="43" y2="27" stroke="#f59e0b" stroke-width="2"/>
+  <line x1="24" y1="19" x2="40" y2="35" stroke="#f59e0b" stroke-width="1.8"/>
+  <line x1="24" y1="35" x2="40" y2="19" stroke="#f59e0b" stroke-width="1.8"/>
+  <!-- Open Textbook Foundation -->
+  <path d="M32 44 C36 41 42 41 48 43 L48 52 C42 50 36 50 32 53 C28 50 22 50 16 52 L16 43 C22 41 28 41 32 44 Z" fill="#ffffff" opacity="0.95"/>
+</svg>
