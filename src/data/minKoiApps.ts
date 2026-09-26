@@ -194,9 +194,9 @@ export const MINKOI_DEFAULT_APPS: (AppProject & { backlog?: BacklogItem[] })[] =
   {
     id: 'simple-webapp-sample',
     title: 'Simple WebApp Sample',
-    frontendUrl: 'https://simple-webapp-sample.vercel.app',
+    frontendUrl: 'https://simplewebappsample.vercel.app',
     github: 'https://github.com/minkoi007cs/simple-webapp-sample',
-    hosting: 'Vercel (simple-webapp-sample)',
+    hosting: 'Vercel (simplewebappsample)',
     database: 'PostgreSQL (sws_ prefix)',
     category: 'Productivity & Finance',
     status: 'Production',
@@ -210,9 +210,9 @@ export const MINKOI_DEFAULT_APPS: (AppProject & { backlog?: BacklogItem[] })[] =
     specEn: makeSpecEn(
       'Simple WebApp Sample',
       'Productivity & Finance',
-      'https://simple-webapp-sample.vercel.app',
+      'https://simplewebappsample.vercel.app',
       'https://github.com/minkoi007cs/simple-webapp-sample',
-      'Vercel (simple-webapp-sample)',
+      'Vercel (simplewebappsample)',
       'PostgreSQL (sws_ prefix)',
       'NestJS 11, React 19, Vite, PostgreSQL, Supabase Auth, TailwindCSS, Ant Design',
       'Serve as a lightweight, clean architectural sample web application with dedicated sws table isolation, RBAC permissions, and sample CRUD workflows.',
