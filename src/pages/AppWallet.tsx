@@ -152,8 +152,13 @@ export default function AppWallet() {
     table: 'mk_app_projects',
     rowToItem: rowToAppProject,
     itemToRow: appProjectToRow,
-    seed: (loaded) =>
-      loaded && loaded.length > 0 ? loaded : MINKOI_DEFAULT_APPS.map(({ backlog, ...rest }) => rest),
+    seed: (loaded) => {
+      const defaultList = MINKOI_DEFAULT_APPS.map(({ backlog, ...rest }) => rest);
+      if (!loaded || loaded.length === 0) return defaultList;
+      const loadedIds = new Set(loaded.map((item) => item.id));
+      const missingDefaults = defaultList.filter((item) => !loadedIds.has(item.id));
+      return [...loaded, ...missingDefaults];
+    },
   });
 
   const { items: backlogItems, setItems: setBacklogItems } = useSyncedCollection<
@@ -166,10 +171,15 @@ export default function AppWallet() {
       projectId: row.project_id,
     }),
     itemToRow: (item) => backlogItemToRow(item, item.projectId),
-    seed: (loaded) =>
-      loaded && loaded.length > 0
-        ? loaded
-        : MINKOI_DEFAULT_APPS.flatMap((p) => (p.backlog || []).map((b) => ({ ...b, projectId: p.id }))),
+    seed: (loaded) => {
+      const defaultBacklog = MINKOI_DEFAULT_APPS.flatMap((p) =>
+        (p.backlog || []).map((b) => ({ ...b, projectId: p.id }))
+      );
+      if (!loaded || loaded.length === 0) return defaultBacklog;
+      const loadedIds = new Set(loaded.map((b) => b.id));
+      const missingBacklogs = defaultBacklog.filter((b) => !loadedIds.has(b.id));
+      return [...loaded, ...missingBacklogs];
+    },
   });
 
   const sharedAppsParam = searchParams.get('apps');
@@ -412,9 +422,14 @@ export default function AppWallet() {
     if (q) {
       result = result.filter(
         (a) =>
+          a.id.toLowerCase().includes(q) ||
           a.title.toLowerCase().includes(q) ||
           (a.description || '').toLowerCase().includes(q) ||
-          (a.category || '').toLowerCase().includes(q)
+          (a.category || '').toLowerCase().includes(q) ||
+          (a.frontendUrl || '').toLowerCase().includes(q) ||
+          (a.github || '').toLowerCase().includes(q) ||
+          (a.techStack || '').toLowerCase().includes(q) ||
+          (a.hosting || '').toLowerCase().includes(q)
       );
     }
 

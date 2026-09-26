@@ -155,7 +155,7 @@ export const MINKOI_DEFAULT_APPS: (AppProject & { backlog?: BacklogItem[] })[] =
   },
   {
     id: 'webapp-sample',
-    title: 'Asset & Expense Management',
+    title: 'Sample WebApp (Asset & Expense)',
     frontendUrl: 'https://sample.minkoi.org',
     github: 'https://github.com/minkoi007cs/webapp-sample',
     hosting: 'Vercel (sample.minkoi.org)',
@@ -165,12 +165,12 @@ export const MINKOI_DEFAULT_APPS: (AppProject & { backlog?: BacklogItem[] })[] =
     priority: 'High',
     author: 'minkoi007cs',
     techStack: 'Turborepo, NestJS 11, React 19, Vite, PostgreSQL, Supabase Auth, TailwindCSS, Shadcn UI',
-    description: 'Comprehensive family asset tracking, natural language expense logger, OCR document repository, and US F4 immigration portal.',
+    description: 'Full-stack sample web application featuring family asset tracking, natural language expense logger, OCR document repository, and US F4 immigration portal.',
     healthStatus: 'healthy',
     manualChecked: true,
     manualCheckedAt: '26/09/2026',
     specEn: makeSpecEn(
-      'Asset & Expense Management',
+      'Sample WebApp (Asset & Expense)',
       'Productivity & Finance',
       'https://sample.minkoi.org',
       'https://github.com/minkoi007cs/webapp-sample',

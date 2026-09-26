@@ -44,6 +44,17 @@ export const APP_BRAND_THEMES: Record<string, AppBrandTheme> = {
     featureBadge: '🔥 Habits & Kanban',
     iconBg: 'linear-gradient(135deg, #059669 0%, #0d9488 100%)',
   },
+  'webapp-sample': {
+    primary: '#3b82f6',
+    bgLight: 'rgba(59, 130, 246, 0.08)',
+    cardBg: 'linear-gradient(145deg, rgba(30, 41, 59, 0.55) 0%, rgba(15, 23, 42, 0.85) 100%)',
+    borderColor: 'rgba(59, 130, 246, 0.3)',
+    hoverBorder: 'rgba(59, 130, 246, 0.7)',
+    glowColor: 'rgba(59, 130, 246, 0.3)',
+    tagline: 'Asset, Expense & F4 Immigration',
+    featureBadge: '🚀 Sample WebApp',
+    iconBg: 'linear-gradient(135deg, #18181b 0%, #27272a 100%)',
+  },
   'house-renting': {
     primary: '#f59e0b',
     bgLight: 'rgba(245, 158, 11, 0.08)',
