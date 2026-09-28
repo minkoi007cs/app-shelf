@@ -484,7 +484,7 @@ http://localhost:5173/**`} />
 
           <h3>Standard Variable Schema</h3>
           <CodeBlock lang="bash" code={`# 1. Supabase Client & Auth (Browser Exposed)
-VITE_SUPABASE_URL=https://msozshwatonyxnkaqjfs.supabase.co
+VITE_SUPABASE_URL=https://gohczmqykjkrgdblgbog.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1Ni...
 
 # 2. Direct Database Connection (Server / Backend Only)

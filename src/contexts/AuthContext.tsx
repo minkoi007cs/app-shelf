@@ -40,7 +40,6 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 const ADMIN_EMAILS = [
-  'johnny.khoihoang@gmail.com',
   'minkoi007.cs@gmail.com',
 ];
 

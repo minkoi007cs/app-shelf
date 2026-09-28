@@ -1,8 +1,8 @@
 -- ============================================================
 -- MinKoi App Shelf - Table Setup Script
 -- Project: apps.minkoi.org (minkoi007cs)
--- Supabase: msozshwatonyxnkaqjfs (shared instance)
--- Table prefix: mk_ (isolated from aw_ used by johnnyhoang)
+-- Supabase: gohczmqykjkrgdblgbog (minkoi007cs)
+-- Table prefix: mk_
 -- Run this via: Supabase Dashboard > SQL Editor
 -- ============================================================
 
@@ -137,31 +137,7 @@ CREATE POLICY "mk_admin can write backlog" ON public.mk_app_backlog_items
   FOR ALL USING (public.mk_perm('can_edit_app_wallet'))
           WITH CHECK (public.mk_perm('can_edit_app_wallet'));
 
--- =============================================
--- Bootstrap admin: johnny.khoihoang@gmail.com
--- =============================================
-INSERT INTO public.mk_user_permissions (
-  user_id, email, role,
-  can_read_token_wallet, can_edit_token_wallet,
-  can_read_payments, can_edit_payments,
-  can_read_app_wallet, can_edit_app_wallet
-)
-SELECT
-  u.id,
-  u.email,
-  'admin',
-  true, true, true, true, true, true
-FROM auth.users u
-WHERE u.email = 'johnny.khoihoang@gmail.com'
-ON CONFLICT (user_id) DO UPDATE SET
-  role = 'admin',
-  can_read_token_wallet = true,
-  can_edit_token_wallet = true,
-  can_read_payments = true,
-  can_edit_payments = true,
-  can_read_app_wallet = true,
-  can_edit_app_wallet = true,
-  updated_at = NOW();
+
 
 -- Bootstrap admin: minkoi007.cs@gmail.com
 INSERT INTO public.mk_user_permissions (
