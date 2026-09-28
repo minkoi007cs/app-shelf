@@ -241,13 +241,9 @@ export default function AppWallet() {
     return apps.find((a) => a.id === appId) || null;
   }, [apps, appId]);
 
-  // Initial tab for AppPortfolioModal if specified in search params
-  const portfolioInitialTab = useMemo(() => {
-    const tabParam = searchParams.get('tab');
-    if (tabParam === 'settings') return 'settings';
-    if (tabParam === 'specs') return 'specs';
-    if (tabParam === 'backlog') return 'backlog';
-    return 'overview';
+  // Initial edit mode for AppPortfolioModal if specified in search params
+  const portfolioInitialEditMode = useMemo(() => {
+    return searchParams.get('tab') === 'settings' || searchParams.get('edit') === 'true';
   }, [searchParams]);
 
   // Dynamic Categories list extracted from projects
@@ -827,12 +823,12 @@ export default function AppWallet() {
             )}
           </div>
 
-          {/* Unified Fullscreen App Portfolio Modal (Overview, Specs, Backlog, and Settings/Admin Edit) */}
+          {/* Unified Fullscreen App Portfolio Modal (Overview, Specs, Backlog unified in single view) */}
           {selectedApp && (
             <AppPortfolioModal
               app={selectedApp}
               canEdit={canEdit}
-              initialTab={portfolioInitialTab}
+              initialEditMode={portfolioInitialEditMode}
               onClose={() => navigate('/app-wallet')}
               onUpdateApp={(updated) => {
                 setProjectItems((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
