@@ -6,8 +6,8 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const sb = createClient(
-  'https://dbzujfyfvxtewfhllice.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRienVqZnlmdnh0ZXdmaGxsaWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NzA4MjMsImV4cCI6MjA4ODM0NjgyM30.ww-qkmIwWVugx8Fq4Sa3nYukghvOAq_3MEF2zNvSASk'
+  'https://gohczmqykjkrgdblgbog.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvaGN6bXF5a2prcmdkYmxnYm9nIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDI5Mjc2OCwiZXhwIjoyMDg5ODY4NzY4fQ.7tene6cSMAtV6z76tYhUWU50XWnca43ICtJiUNbvBC4'
 );
 
 // MinKoi's 14 apps for mk_app_projects

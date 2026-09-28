@@ -1,18 +1,20 @@
 /**
- * Create mk_* tables on dbzujfyfvxtewfhllice (MinKoi Supabase LifeDashboard)
+ * Seed mk_* tables on gohczmqykjkrgdblgbog (MinKoi Supabase)
  * Run: node scripts/setup_and_seed.cjs
  */
 const { createClient } = require('@supabase/supabase-js');
 
-const SUPABASE_URL = 'https://dbzujfyfvxtewfhllice.supabase.co';
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRienVqZnlmdnh0ZXdmaGxsaWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NzA4MjMsImV4cCI6MjA4ODM0NjgyM30.ww-qkmIwWVugx8Fq4Sa3nYukghvOAq_3MEF2zNvSASk';
+const SUPABASE_URL = 'https://gohczmqykjkrgdblgbog.supabase.co';
+const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvaGN6bXF5a2prcmdkYmxnYm9nIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDI5Mjc2OCwiZXhwIjoyMDg5ODY4NzY4fQ.7tene6cSMAtV6z76tYhUWU50XWnca43ICtJiUNbvBC4';
 
-const sb = createClient(SUPABASE_URL, ANON_KEY);
+const sb = createClient(SUPABASE_URL, SERVICE_KEY);
 
 const minkoiApps = [
   { id: 'app-shelf', title: "MinKoi's App Store Workspace", frontend_url: 'https://apps.minkoi.org', github: 'https://github.com/minkoi007cs/app-shelf', hosting: 'Vercel (apps.minkoi.org)', database: 'Neon PostgreSQL', category: 'System & Tools', status: 'Production', priority: 'High', author: 'minkoi007cs', tech_stack: 'React 19, TypeScript, Vite, Supabase Auth & PostgreSQL, Vercel Edge', description: 'Centralized ecosystem portal, app directory, and workspace launcher for MinKoi digital applications.', health_status: 'healthy', manual_checked: true, manual_checked_at: '25/09/2026' },
   { id: 'apps-system', title: 'Apps System', frontend_url: 'https://apps-system.vercel.app', github: 'https://github.com/minkoi007cs/app_system', hosting: 'Vercel (apps-system)', database: 'Neon Database', category: 'Infrastructure & Cloud', status: 'Production', priority: 'High', author: 'minkoi007cs', tech_stack: 'Next.js App Router, Better Auth, TypeScript, Dynamic Multi-DB Routing Engine', description: 'Lightweight, self-hosted Backend-as-a-Service with dynamic routing across free database tiers and turnkey SDK.', health_status: 'healthy', manual_checked: true, manual_checked_at: '25/09/2026' },
   { id: 'lifedashboard', title: 'LifeDashboard', frontend_url: 'https://mikoi-life.vercel.app', github: 'https://github.com/minkoi007cs/lifedashboard', hosting: 'Vercel (mikoi-life)', database: 'Supabase LifeDashboard', category: 'Productivity & Life', status: 'Production', priority: 'High', author: 'minkoi007cs', tech_stack: 'Turborepo, NestJS 11, React 19, Vite, PostgreSQL, Passport JWT, TailwindCSS', description: 'Modern personal productivity and life management dashboard built as a monorepo with NestJS and React.', health_status: 'healthy', manual_checked: true, manual_checked_at: '25/09/2026' },
+  { id: 'webapp-sample', title: 'Sample WebApp (Asset & Expense)', frontend_url: 'https://sample.minkoi.org', github: 'https://github.com/minkoi007cs/webapp-sample', hosting: 'Vercel (sample.minkoi.org)', database: 'Supabase PostgreSQL', category: 'Productivity & Finance', status: 'Production', priority: 'High', author: 'minkoi007cs', tech_stack: 'Turborepo, NestJS 11, React 19, Vite, PostgreSQL, Supabase Auth, TailwindCSS, Shadcn UI', description: 'Full-stack sample web application featuring family asset tracking, natural language expense logger, OCR document repository, and US F4 immigration portal.', health_status: 'healthy', manual_checked: true, manual_checked_at: '26/09/2026' },
+  { id: 'simple-webapp-sample', title: 'Simple WebApp Sample', frontend_url: 'https://ssample.minkoi.org', github: 'https://github.com/minkoi007cs/simple-webapp-sample', hosting: 'Vercel (ssample.minkoi.org)', database: 'PostgreSQL (sws_ prefix)', category: 'Productivity & Finance', status: 'Production', priority: 'High', author: 'minkoi007cs', tech_stack: 'NestJS 11, React 19, Vite, PostgreSQL, Supabase Auth, TailwindCSS, Ant Design', description: 'Clean reference starter template for full-stack web application with dedicated sws table namespace, modular RBAC permissions, and sample CRUD workflows.', health_status: 'healthy', manual_checked: true, manual_checked_at: '26/09/2026' },
   { id: 'house-renting', title: 'House Renting Manager', frontend_url: 'https://house-renting-frontend.vercel.app', github: 'https://github.com/minkoi007cs/house_renting', hosting: 'Vercel (house-renting)', database: 'Neon PostgreSQL', category: 'Real Estate & Finance', status: 'Production', priority: 'High', author: 'minkoi007cs', tech_stack: 'React, TypeScript, Node.js API, PostgreSQL, Vercel Serverless', description: 'Rental property billing platform automating tenant tracking, utility calculations, and monthly invoicing.', health_status: 'healthy', manual_checked: true, manual_checked_at: '25/09/2026' },
   { id: 'embeded-system', title: 'Embedded Systems Hub', frontend_url: 'https://embeded-system.vercel.app', github: 'https://github.com/minkoi007cs/Embeded_system', hosting: 'Vercel (embeded-system)', database: 'Browser State & Local Storage', category: 'Engineering & Robotics', status: 'Production', priority: 'Medium', author: 'minkoi007cs', tech_stack: 'React, TypeScript, FreeRTOS & ARM Cortex-M Curriculum, ROS2/SLAM Simulations, Vite', description: 'Interactive curriculum & engineering hub for Embedded Systems & Robotics.', health_status: 'healthy', manual_checked: true, manual_checked_at: '25/09/2026' },
   { id: 'learning-ai', title: 'Learning AI Platform', frontend_url: 'https://learning-ai-pink-one.vercel.app', github: 'https://github.com/minkoi007cs/learning_AI', hosting: 'Vercel (learning-ai)', database: 'Neon PostgreSQL', category: 'AI & Machine Learning', status: 'Production', priority: 'Medium', author: 'minkoi007cs', tech_stack: 'React, TypeScript, OpenAI API, Gemini API, Pyodide, TailwindCSS', description: 'Interactive AI learning lab, neural network experimentation sandbox, and intelligent study assistant.', health_status: 'healthy', manual_checked: true, manual_checked_at: '25/09/2026' },
@@ -27,24 +29,16 @@ const minkoiApps = [
 ];
 
 async function run() {
-  console.log('📦 Testing connection to dbzujfyfvxtewfhllice...');
+  console.log('📦 Testing connection to gohczmqykjkrgdblgbog...');
   
-  // Try inserting — will fail if table doesn't exist yet
   const { error: testErr } = await sb.from('mk_app_projects').select('id').limit(1);
   
   if (testErr && testErr.message.includes('does not exist')) {
     console.log('❌ mk_app_projects table does not exist yet.');
-    console.log('👉 Please run supabase/setup_mk_tables.sql in Supabase Dashboard first.');
-    console.log('   URL: https://supabase.com/dashboard/project/dbzujfyfvxtewfhllice/sql/new');
     process.exit(1);
   }
 
-  if (testErr) {
-    console.log('⚠️  Query error (may be RLS):', testErr.message);
-    console.log('Trying upsert anyway...\n');
-  } else {
-    console.log('✅ Table exists! Seeding...\n');
-  }
+  console.log('✅ Table exists! Seeding...\n');
 
   let ok = 0, fail = 0;
   for (const app of minkoiApps) {
